@@ -1,0 +1,31 @@
+{% extends "app/base.html" %}
+
+{% block title %} Schedule {% endblock %}
+
+{% block content %}
+
+
+<table class = 'schedule'>
+    <tr>
+        <th class = 'schedule_left'>  </th>
+        {% for day in days %}
+        <th>{{day}}</th>
+        {% endfor %}
+    </tr>
+
+    {% for time, row in data_colors %}
+        <tr>
+            <th class = 'schedule_left'>{{time}}</th>
+            {% for day, block, color in row %}
+            <td style = 'background-color: {{color}}'>
+                <div class = "block {{block}}" id="block_{{day}}_{{time}}" name = "{{day}} {{time}}" style = 'font-size: small; background-color: {{color}}'>{{block}}</div>
+            </td>
+            {% endfor %}
+        </tr>
+    {% endfor %}
+</table>
+
+
+
+
+{% endblock %} 

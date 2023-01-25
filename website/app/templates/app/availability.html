@@ -1,0 +1,126 @@
+{% extends "app/base.html" %}
+
+{% block title %} Availability {% endblock %}
+
+{% block content %} 
+
+<table class = 'schedule'>
+    <tr>
+        <th class = 'schedule_left'>  </th>
+        {% for day in days %}
+        <th>{{day}}</th>
+        {% endfor %}
+    </tr>
+
+    {% for time, row in data_2d %}
+        <tr>
+            <th class = 'schedule_left'>{{time}}</th>
+            {% for day, block in row %}
+            <td class = 'is_{{block}}' id = "wrapper_{{day}}_{{time}}">
+                <button class = "block is_{{block}}" id = "{{day}}_{{time}}">{{block}}</button>
+            </td>
+            {% endfor %}
+        </tr>
+    {% endfor %}
+</table>
+
+<form action = "{% url 'save_availability'%}" method = 'post'> 
+    {% csrf_token %}
+    {% for time, row in data_2d %}
+        {% for day, block in row %}
+            <input type = 'hidden' id = "input_{{day}}_{{time}}" name = "{{day}} {{time}}" value = "{{block}}">
+        {% endfor %}
+    {% endfor %}
+<input type="submit" class="clickable" value="Save">
+</form>
+
+<script>
+    // buttons are now checkboxes 
+    // var data_str = {{ data_str }};
+    updating = false;
+    function toggle_updating(block){
+        updating = !updating;
+        update_value(block)
+    }
+    function update_value(block) {
+        if (!updating) {
+            return
+        }
+        day_time = block.id // format #input_Monday_7\\:00 for example 
+        split = day_time.split(':')
+        input_query = '#input_'+split[0] + '\\:' + split[1]
+        hidden_input = document.querySelector(input_query)
+        wrapper_query = '#wrapper_'+split[0]+'\\:'+split[1]
+        wrapper = document.querySelector(wrapper_query)
+        if (block.classList.contains("is_0")) {
+            block.className = "block is_1"
+            block.textContent = "1"
+            hidden_input.value = "1"
+            wrapper.className = 'is_1'
+        }
+        else {
+            block.className = "block is_0"
+            block.textContent = "0"
+            hidden_input.value = "0"
+            wrapper.className = 'is_0'
+        }
+    }
+    const blocks = document.querySelectorAll('button.block');
+    for (const block of blocks) {
+        block.addEventListener("click", function () { update_value(block); });
+        block.addEventListener('mousedown', function () { toggle_updating(block); })
+        block.addEventListener('mouseup', function() {updating = false; })
+        block.addEventListener("mouseenter", function () { update_value(block); });
+        // block.addEventListener("dragstart", function () { update_value(block); });
+    }
+    /*
+    function save() {
+        const XHR = new XMLHttpRequest();
+        const FD = new FormData();
+        for (const block of blocks) {
+            FD.append(block.name, block.textContent)
+        }
+        XHR.addEventListener('load', (event) => {
+        alert('yay it worked.');
+        });
+
+        XHR.addEventListener('error', (event) => {
+        alert('HOUSTON HOUSTON WE HAVE A PROBLEM');
+        }); 
+
+        XHR.open('POST', "{% url 'save_availability' %}");
+        XHR.send(FD);
+    }
+    function sendData(data) {
+        const XHR = new XMLHttpRequest();
+        const FD = new FormData();
+
+        // Push our data into our FormData object
+        for (const [name, value] of Object.entries(data)) {
+             FD.append(name, value);
+        }
+
+        // Define what happens on successful data submission
+        XHR.addEventListener('load', (event) => {
+            alert('Yeah! Data sent and response loaded.');
+        });
+
+        // Define what happens in case of an error
+        XHR.addEventListener('error', (event) => {
+            alert('Oops! Something went wrong.');
+        });
+
+        // Set up our request
+        XHR.open('POST', 'https://example.com/cors.php');
+
+        // Send our FormData object; HTTP headers are set automatically
+        XHR.send(FD);
+    }
+    const save_button = document.querySelectorAll('button.save');
+    save_button.addEventListener('click', () => {
+        sendData({test: 'ok'});
+    });*/
+    
+</script>
+
+{% endblock %} 

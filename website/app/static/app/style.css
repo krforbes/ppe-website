@@ -1,0 +1,400 @@
+
+#main-block {
+    font-family: Arial, Helvetica, sans-serif; 
+}
+
+#comic-sans {
+    font-family: 'Comic Sans MS', fantasy;
+}
+td{
+    background-color: white;
+    padding: 0px;
+    overflow: hidden;
+    font-size: small;
+    height: 20px;
+}
+
+.block{
+    border-radius: 0;
+    width: 100px;
+    border-width: 0px;
+    margin-left: 3px;
+    font-size:small;
+    overflow: scroll;
+    height: 20px;
+
+}
+
+th{
+    background-color: white;
+}
+
+.schedule_left{
+    width: 50px;
+}
+
+.is_0{
+    background-color: white;
+    color: white;
+}
+
+.is_1{
+    background-color: #00cc00;
+    color: #00cc00;
+}
+
+.is_-1{
+    background-color: darkslategrey;
+    color: darkslategrey;
+
+}
+
+#top{
+    background-color: #444444;
+    height: 15%;
+    width: 100%;
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    color: #444444;
+}
+
+.menu-account{
+    text-decoration: none;
+    position: absolute;
+    bottom: 0%;
+    right: 0%;
+    left: 78%;
+    color: lightcyan;
+}
+.menu-account p{
+    margin-left: 20%;
+}
+
+.menu-account a{
+    color: lightcyan;
+}
+
+#cat{
+    position: absolute;
+    bottom: calc(85% - 59px);
+    left: 60%;
+    height: 150px;
+    width: auto;
+}
+
+#menu-block{
+    background-color: #444444;
+    width: 27%;
+    position: absolute;
+    top: 15%;
+    left: 0%;
+    height: 85%;
+}
+#menu{
+    background-color: #2bc32b;
+    position: absolute;
+    left: 29%;
+    top: 0%;
+    width: 71%;
+    height: 100%;
+}
+
+.menu-element{
+    border-width: 2px;
+    border-color: #444444;
+    border-style:solid;
+    text-decoration: none;
+}
+
+.menu-element:hover{
+    background-color: lightcyan;
+}
+
+.menu-element p{
+    margin-left: 20%;
+    font-size: 120%;
+    text-decoration: none;
+}
+
+.menu-link{
+    text-decoration: none;
+    color: rgb(80, 19, 136);
+}
+
+
+
+
+#content-box{
+    position: absolute;
+    top: 15%;
+    left: 27%;
+    right: 0%;
+    bottom: 0%;
+    overflow: scroll;
+    /*display: flex;
+    /* align-items: center;
+    justify-content: center;*/
+}
+
+#content{
+    position: absolute;
+    top: 7%;
+    left: 7%;
+    width: 785px;
+}
+
+.schedule{
+    background-color: #222222;
+}
+
+.secret{
+    display: none;
+}
+
+#piece_table{
+    background-color: olivedrab;
+}
+.piece_table_left{
+    width: 98px;
+}
+.piece_table_column{
+    width: 132px;
+}
+
+.input_box{
+    border: none;
+}
+
+#bottom-menu{
+    background-color: gold;
+    position: relative;
+    left:0%;
+}
+#comments{
+    background-color: lemonchiffon;
+    overflow-wrap: break-word;
+    position: absolute;
+    left: 0%;
+    height: 150px;
+}
+#suggested_matchings{
+    background-color: rgb(255, 208, 215); 
+    position: absolute;
+    left: 50%;
+    top: 0%;
+    height: 150px;
+}
+.box{
+    height: 100%;
+    width: 50%;
+    overflow-y: scroll;
+}
+#comment-table{
+    overflow-wrap: break-word;
+
+}
+.comment-text{
+    overflow-wrap: break-word;
+    width: 320px;
+
+}
+#table-of-preferences{
+    position: absolute;
+    top: 164px;
+    width: 785px;
+}
+#pref_table{
+    background-color: black;
+}
+#pref_table td{
+    padding: 3px;
+}
+
+.input_box{
+    width: 100px; 
+}
+
+.clickable{
+    border-color: #555555;
+    border-width: 2px; 
+    border-style: solid;
+    width: 200px;
+    height: 30px;
+    font-size: 120%;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    background-color: white;
+}
+
+.clickable:hover{
+    background-color: lightcyan;
+}
+
+.hover_button{
+    border-color: #555555;
+    border-width: 2px;
+    border-style: solid;
+    background-color: white;
+    height: 30px;
+    font-size: medium;
+}
+
+.hover_button:hover{
+    background-color: #00cc00;
+}
+
+#filter_mcalpin{
+    font-size: 70%;
+}
+
+.menu_name{
+    padding: 3px;
+}
+
+#comment_box{
+    width: 753px;
+    height: 60px;
+}
+
+#submit_preferences{
+    margin-left: 16px;
+}
+
+
+#start_text{
+    margin-left: 50px;
+}
+
+
+#riddle_block{
+    position: absolute;
+    top: 150px;
+    left: 50px;
+    right: 50px;
+    height: 300px;
+    border-color: blue;
+    border-width: 3px;
+    border-style: solid;
+
+}
+
+.riddle{
+    font-size: large;
+    font-style: italic;
+    font-family:'Times New Roman', Times, serif;
+}
+
+#riddle_1{
+    width: 391px;
+    position: absolute;
+    left: 125px;
+    top: 50px;
+}
+
+#riddle_2{
+    width: 391px;
+    position: absolute;
+    left: 0px;
+    top: 50px;
+}
+#riddle_2_text{
+    margin-left: 280px;
+    width: 200px;
+}
+
+#riddle_3{
+    width: 150px;
+    position: absolute;
+    left: 264px;
+    top: 50px;
+}
+
+#congrats{
+    position: absolute;
+    left: 90px;
+    top: 50px;
+    width: 500px;
+    font-family: 'Times New Roman', Times, serif;
+    font-style: italic;
+    
+}
+
+#answer{
+    position: absolute;
+    width: 150px;
+    bottom: 50px;
+    left: 264px;
+}
+
+#check{
+    position: absolute;
+    width: 50px;
+    bottom: 20px;
+    left: 314px;
+
+}
+#continue{
+    position: absolute;
+    width: 70px;
+    bottom: 20px;
+    left: 304px;
+
+}
+
+#wrong, #close{
+    background-color: lightcoral;
+    padding: 5px;
+    position: absolute;
+    width: 200px;
+    left: 239px;
+    bottom: -20px;
+}
+
+#riddle_title{
+    background-color: white;
+    position: absolute;
+    top: -21px;
+    left:288px;
+    font-size:x-large; 
+    /* width: 110px;*/
+    padding: 5px;
+    color: blue;
+
+}
+#musescore {
+    width: 679px;
+    height: auto;
+}
+
+#success_cat{
+    position: absolute;
+    top: -91px;
+    left: 60%;
+    height: 150px;
+    width: auto;
+}
+
+
+
+#login_form{
+    width: 300px;
+    height: 100px;
+}
+
+#login_form fieldset{
+    background-color: white;
+}
+
+#login_page{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: lightcyan;
+}
+
+.login_text{
+    width: 180px;
+}

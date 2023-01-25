@@ -1,0 +1,30 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'app/style.css' %}">
+
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8" />
+    <title>login</title>
+  </head>
+  <body>
+    <div id = 'login_page'>
+    <div id = 'login_form'>
+    <div id = 'error'>{{error}}</div>
+    <form action="{% url 'login_action' %}" method="post">
+    {% csrf_token %}
+    <fieldset>
+    <label for="username"> Username: </label>
+    <input type="text" name="username" class = 'login_text' id="username">
+    <br>
+    <label for="password"> Password:  </label>
+    <input type="password" name="password" class = 'login_text' id="password">
+    <input type="submit" value="Login">
+    <br>
+    </fieldset>
+    </form>
+  </div>
+  </div>
+  </body>
+</html>

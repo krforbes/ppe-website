@@ -1,0 +1,34 @@
+{% extends "app/base.html" %}
+
+{% block title %} Schedule {% endblock %}
+
+{% block content %} 
+<p> max hours: {{max_hours}} </p> 
+<a href = "{% url 'availability_view' 'mcalpin' %}"> View/edit rehearsal space availability </a> <br>
+
+<form action = "{% url 'schedule_generate'%}" method = 'post'> 
+    {% csrf_token %}
+    <fieldset>
+<table class = 'schedule'>
+    <tr>
+        <th> Piece </th>
+        <th> Number of hours </th>
+        <th> Arrangers need to be there</th>
+    </tr>
+    {% for piece in piece_list %}
+        <tr>
+            <th>{{piece.name}}</th>
+            <td>
+                <input type = 'number' name = '{{piece.name}}_hours' id = '{{piece.name}}_hours' value = '1'> 
+            </td>
+            <td>
+                <input type = 'hidden' name = '{{piece.name}}_arrangers' value = 'No'>
+                <input type = 'checkbox' name = '{{piece.name}}_arrangers' value = 'Yes' checked > 
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+</fieldset>
+<input type="submit" value="Generate">
+</form>
+{% endblock %} 

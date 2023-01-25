@@ -1,0 +1,20 @@
+{% extends "app/base.html" %}
+
+{% block title %} View availability {% endblock %}
+
+{% block content %} 
+
+<p><b>People who have not updated availability since the last reset:</b>
+{% for user in missing %}
+{{user.username}}
+{% endfor %} 
+</p>
+
+<p><a href = "{% url 'availability_view' 'mcalpin' %}"> View/edit rehearsal space availability </a> </p>
+
+<p>Individual pieces: 
+{% for piece in pieces %}
+<li><a href = "{% url 'availability_view' piece.name %}">{{piece.name}}</a></li>
+{% endfor %}
+</p>
+{% endblock %}

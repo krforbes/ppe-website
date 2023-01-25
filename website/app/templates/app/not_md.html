@@ -1,0 +1,121 @@
+{% extends "app/base.html" %}
+{% load static %}
+{% block title %} what are you doing here {% endblock %}
+
+{% block content %} 
+
+{% if comic_sans %}
+<p> You aren't the MD! You shouldn't be on this page! </p>
+{% endif %}
+
+{% if riddles %}
+<div id = 'start_text'>
+    You aren't the MD! To continue you must answer three riddles. <br> 
+</div>
+
+<div id = 'riddle_block'>
+    <div id = 'riddle_title'>Riddle #1</div>
+    <p>
+    <div id = 'riddle_1' class = 'riddle'>
+        What is always in front of you, but can never be seen?
+    </div>
+    <div id = 'riddle_2' class = 'riddle secret'><div id = 'riddle_2_text'>Qjgi nvfef vr ijvr?</div><img id = 'musescore' src = "{% static 'app/riddle.png' %}"></div>
+    <div id = 'riddle_3' class = 'riddle secret'> how are you so good </div>
+    <div id = 'congrats' class = 'secret'> Congratulations! You still don't get to access the MD pages, but you get a cat.</div><br></p>
+    <p><input type = 'text' id = 'answer' value = '' /><br>
+    <button id = 'check'>Check</button></p>
+    <div id = 'wrong' class = 'secret'> this is wrong try again</div>
+    <div id = 'close' class = 'secret'> this is close! </div>
+    <img id = 'success_cat' class = 'secret' src="{% static 'app/cat.png' %}">
+
+    <form action = "{% url 'riddle_success' %}" method = 'post'>
+        {% csrf_token %}
+        <input type = 'hidden' name = 'success' id = 'confirm_success' value = 'no'>
+        <input type = 'submit' value = 'continue' id = 'continue' class = 'secret'>
+    </form>
+</div>
+
+<script>
+    stage = 1
+    start_text = document.querySelector('#start_text')
+    title = document.querySelector('#riddle_title')
+    riddle_1 = document.querySelector('#riddle_1')
+    riddle_2 = document.querySelector('#riddle_2')
+    riddle_3 = document.querySelector('#riddle_3')
+    congrats = document.querySelector('#congrats')
+    response = document.querySelector('#answer')
+    wrong = document.querySelector('#wrong')
+    almost = document.querySelector('#close')
+    cat = document.querySelector('#success_cat')
+    confirm_success = document.querySelector('#confirm_success')
+    end = document.querySelector('#continue')
+
+    function update_riddle(){
+        wrong.className = 'secret'
+        almost.className = 'secret'
+        answer = response.value.toLowerCase()
+        if (stage == 1){
+            if (answer.includes('future')){
+            riddle_1.className = 'riddle secret'
+            riddle_2.className = 'riddle'
+            stage += 1
+            title.textContent = 'Zvbbkf #2'
+            button.textContent = 'Ejfex'
+            start_text.className = 'secret'
+            }
+            else{
+                wrong.className = ''
+            }
+        }
+        else if (stage == 2){
+            if (answer == 'qgkbrifvw'){
+            riddle_2.className = 'riddle secret'
+            riddle_3.className = 'riddle'
+            stage += 1
+            title.textContent = 'Riddle #3'
+            button.textContent = 'Check'
+            }
+            else{
+                if (answer.includes('waldstein')){
+                    almost.className = ''
+                }
+                else{
+                    wrong.className = ''
+                }
+            }
+        }
+        else {
+            if (answer.includes('e')){
+            riddle_3.className = 'riddle secret'
+            congrats.className = ''
+            response.className = 'secret'
+            check.className = 'secret'
+            confirm_success.value = 'yes'
+            end.className = ''
+            title.className = 'secret'
+            cat.className = ''
+            
+            }
+            else{
+                wrong.className = ''
+            }
+        }
+        response.value = ''
+        
+    }
+
+    function vanish_start_message(){
+        start_text.className = 'secret'
+    }
+
+    button = document.querySelector('#check');
+    button.addEventListener('click', update_riddle)
+
+
+</script>
+
+{% endif %}
+{% endblock %}
+
+
+

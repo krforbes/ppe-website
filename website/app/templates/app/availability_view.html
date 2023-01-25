@@ -1,0 +1,92 @@
+{% extends "app/base.html" %}
+
+{% block title %} {{thing}}'s availability {% endblock %}
+
+{% block content %} 
+
+<table class = 'schedule'>
+    <tr>
+        <th class = 's schedule_left'>  </th>
+        {% for day in days %}
+        <th class = 's'>{{day}}</th>
+        {% endfor %}
+    </tr>
+
+    {% for time, row in data_colors %}
+        <tr>
+            <th class = 's schedule_left'>{{time}}</th>
+            {% for day, block, color in row %}
+            <td style = 'background-color: {{color}}; color: {{color}}'>
+                <button class = "block {{block}} {{color}}" id="block_{{day}}_{{time}}" name = "{{day}} {{time}}", style = 'background-color: {{color}}; color: {{color}}'>{{block}}</button>
+            </td>
+            {% endfor %}
+        </tr>
+    {% endfor %}
+</table>
+
+{% if thing != 'mcalpin' %}
+<button class = 'filter clickable' id = 'filter_mcalpin'>Filter by available mcalpin times</button>
+<div class = 'secret'>
+    (Arrays that Javascript needs to access)
+    <div class = 'mcalpin'>{{mcalpin}}</div>
+    <div class = 'days'>{{days}}</div>
+    <div class = 'times'>{{times}}</div> 
+</div>
+
+<script>
+    function to_array(input_str){
+        no_quotes = input_str.replaceAll('\'', '') // no quotes 
+        no_spaces = no_quotes.replaceAll(' ', '')
+        stripped = no_spaces.slice(1, -1);
+        return stripped.split(',');
+    }
+    // idk why but if I try to merge queryselector into the function it crashes so here are 3 long lines 
+    mcalpin = to_array(document.querySelector('div.mcalpin').textContent)
+    days = to_array(document.querySelector('div.days').textContent)
+    times = to_array(document.querySelector('div.times').textContent)
+    hidden = false
+    button = document.querySelector('button.filter');
+    function update_hidden() {
+        hidden = !hidden;
+        blocks = document.querySelectorAll('button.block')
+        for (const block of blocks){
+            if (hidden){
+                day = block.name.split(' ')[0]
+                time = block.name.split(' ')[1]
+                num = 7*times.indexOf(time) + days.indexOf(day)
+                if (mcalpin[num] == 0){ // if mcalpin is not available hide it
+                    block.style = 'background-color: #777777; color: #777777';
+                }
+                else { // this resets any other filters
+                    color = block.className.split(' ')[2] 
+                    block.style = 'background-color: '+color+ '; color: '+color + ';';
+                }
+            }
+            else {
+                color = block.className.split(' ')[2] 
+                block.style = 'background-color: '+color+ '; color: '+color + ';';
+            }
+        }
+    }
+    button.addEventListener("click", update_hidden);
+</script>
+{% endif %}
+
+{% if is_user %} 
+<p>Last updated: {{user.profile.availability_updated}}</p>
+{% endif %}
+
+{% if not is_user %}
+<div id = 'people_menu'>
+{% for user in arrangers %}
+    <div class = 'menu_name'><a href="{% url 'availability_view' user.username %}">{{user.username}}</a></div>
+{% endfor %}
+{% for user in performers %}
+    {% if user not in arrangers %}
+    <div class = 'menu_name'><a href="{% url 'availability_view' user.username %}">{{user.username}}</a></div>
+    {% endif %}
+{% endfor %}
+</div>
+{% endif %}
+
+{% endblock %}
