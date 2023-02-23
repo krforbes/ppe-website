@@ -2,7 +2,7 @@ from django.db import models
 import datetime
 
 days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-times = [str(i)+':00' for i in range(7, 24)]
+times = [str(i//4+7)+':'+str(15*(i%4)).zfill(2) for i in range((24-7)*4)]
 empty_list = [0 for i in range(len(days)*len(times))]
 none_list = ['' for i in range(len(days)*len(times))]
 EMPTY_SCHEDULE = str(empty_list)
@@ -31,7 +31,7 @@ class Piece(models.Model):
     color = models.CharField(max_length = 10, default = '#ffffff')
     def __str__(self):
         return self.name
-    
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     pref = models.CharField(max_length = 1000, default = '[0]', blank = True)
@@ -47,24 +47,29 @@ class Profile(models.Model):
         data_list = stripped.split(',') # BY ROW!!!! EVEN THOUGH ITS WEIRD
         for i in range(len(data_list)): # remove leading/trailing whitespace
             s = data_list[i]
-            s = s.strip() 
+            s = s.strip()
             if s[0] == '\'':
                 s = s[1:]
             if s[-1] == '\'':
                 s = s[:-1]
             data_list[i] = s
         return data_list[index]=='1'
+    def __str__(self):
+        if self.has_cat:
+            return "*"
+        else:
+            return ' '
 
 
-class Schedule(models.Model): # this is really just global variables 
-    pieces = models.CharField(max_length = 5000, default = NONE_SCHEDULE) # schedule itself 
+class Schedule(models.Model): # this is really just global variables
+    pieces = models.CharField(max_length = 5000, default = NONE_SCHEDULE) # schedule itself
     availability = models.CharField(max_length = 1000, default = EMPTY_SCHEDULE) # mcalpin availability
     name = models.CharField(max_length = 10, default = 'schedule') # for finding the schedule
     pref_reset = models.DateTimeField('last reset preferences')
     availability_reset = models.DateTimeField('last reset availability')
-    matching_string = models.CharField(max_length = 10000, default = '', blank = True) # for sending suggested matchings back to md page 
+    matching_string = models.CharField(max_length = 10000, default = '', blank = True) # for sending suggested matchings back to md page
 
     def __str__(self):
         return "This is just for global variables"
 
-    
+

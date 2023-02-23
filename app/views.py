@@ -9,8 +9,11 @@ import pandas as pd
 from django.utils import timezone
 from .matchings import *
 import random
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+import datetime
 
-main_url = '/app/'
+main_url = '/'
 login_url = main_url+'login/'
 schedule_url = main_url+'schedule/'
 no_url = main_url+'no/'
@@ -21,17 +24,18 @@ schedule_md_url = main_url+'schedule/md/'
 
 
 days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-times = [str(i)+':00' for i in range(7, 24)]
+times = [str(i//4+7)+':'+str(15*(i%4)).zfill(2) for i in range((24-7)*4)] # 7am to midnight in 15 min increments
+default_date = datetime.datetime(2000, 1, 1, 1, 0, 0)
 
 
 
-# this can be improved tbh and it can be 2 functions + a version for ints 
+# this can be improved tbh and it can be 2 functions + a version for ints
 def read_string_to_lists(data_str):
     stripped = data_str[1:-1] # remove [ and ]
     data_list = stripped.split(',') # BY ROW!!!! EVEN THOUGH ITS WEIRD
     for i in range(len(data_list)): # remove leading/trailing whitespace
         s = data_list[i]
-        s = s.strip() 
+        s = s.strip()
         if s[0] == '\'':
             s = s[1:]
         if s[-1] == '\'':
@@ -51,6 +55,20 @@ def str_to_int_list(data_str):
         data_list[i] = int(data_list[i])
     return data_list
 
+def first_uppercase(username):
+    if len(username) == 0:
+        return username
+    if len(username) == 1:
+        return username.upper()
+    return username[0].upper() + username[1:]
+
+def first_last_uppercase(username):
+    if len(username) == 0:
+        return username
+    if len(username) == 1:
+        return username.upper()
+    return username[0].upper() + username[1:-1] + username[-1].upper()
+
 
 ###################################################################################
 #
@@ -58,15 +76,38 @@ def str_to_int_list(data_str):
 #
 ###################################################################################
 
+# automatically create user profiles when users are created!
+# should prevent the site from breaking
+@receiver(post_save, sender=User)
+def create_user_profiles(sender, **kwargs):
+    if not kwargs['created']:
+        return
+    user = kwargs['instance']
+    p = Profile(pref_updated = default_date, availability_updated = default_date, user = user)
+    p.save()
+    user.profile = p
+    p.user = user
+    p.save()
+    user.save()
+
 def login_action(request):
     username = request.POST['username']
     password = request.POST['password']
     user = authenticate(request, username=username, password=password)
+    if user is None: # try uppercaseing it
+        user = authenticate(request, username = first_uppercase(username), password=password)
+    if user is None: # try uppercaseing last initial as well
+        user = authenticate(request, username = first_last_uppercase(username), password = password)
+    if user is None: # not recognized at all
+        return HttpResponseRedirect(login_url)
+    login(request, user)
+    return HttpResponseRedirect(main_url)
+    '''
     if user is not None:
         login(request, user)
         return HttpResponseRedirect(main_url)
     else:
-        return HttpResponseRedirect(login_url)
+        return HttpResponseRedirect(login_url)'''
 
 def login_page(request):
     template = loader.get_template('app/login_page.html')
@@ -88,8 +129,8 @@ def not_md(request):
     if r < 0.2:
         return HttpResponseRedirect('https://youtu.be/dQw4w9WgXcQ')
     # also 1/5 probability of this
-    if r < 0.4: 
-        request.user.profile.cursed_with_comic_sans = True 
+    if r < 0.4:
+        request.user.profile.cursed_with_comic_sans = True
         request.user.profile.save()
         comic_sans=True
         riddles=False
@@ -121,11 +162,12 @@ def index(request):
     template = loader.get_template('app/index.html')
     context = {
         'user': request.user,
+        'pieces': request.user.playing.all(),
     }
     return HttpResponse(template.render(context, request))
 
-# this should probably exist but it's not working??? 
-def change_password_setup(request): # enter username to get emailed a code 
+# this should probably exist but it's not working???
+def change_password_setup(request): # enter username to get emailed a code
     return HttpResponseRedirect('/accounts/password_change')
 
 def go_to_admin_site(request):
@@ -151,7 +193,7 @@ def preferences(request):
 def save_preferences(request):
     pref = []
     if request.POST['hard'] == 'yes':
-        pref.append(1) # hard 
+        pref.append(1) # hard
     else:
         pref.append(0)
     if request.POST['hard'] != 'no':
@@ -195,7 +237,7 @@ def preferences_md(request):
     # list of pieces and their current players
     pieces_players = []
     piece_names = [piece.name for piece in Piece.objects.all()]
-    piece_names.sort() # we like alphabetical order 
+    piece_names.sort() # we like alphabetical order
     for piece_name in piece_names:
         piece = Piece.objects.get(name = piece_name)
         current = []
@@ -205,12 +247,12 @@ def preferences_md(request):
         for i in range(piece.num_pianists):
             current.append((i+1, performers[i]))
         pieces_players.append((piece, current))
-    # comments 
+    # comments
     comments = []
     for user in User.objects.all():
         if user.profile.pref_comments != '':
             comments.append((user.username, user.profile.pref_comments))
-    # matching string becomes a list 
+    # matching string becomes a list
     matching_list = schedule.matching_string.split('.')
     full_list = []
     for substring in matching_list:
@@ -222,15 +264,15 @@ def preferences_md(request):
         row = []
         pref = str_to_int_list(user.profile.pref)
         if user.profile.pref_updated >= schedule.pref_reset and len(pref) == len(Piece.objects.all())+4:
-            if pref[0]==1 and pref[1] == 1: 
+            if pref[0]==1 and pref[1] == 1:
                 row.append('yes')
-            elif pref[0] == 0:
+            elif pref[1] == 1:
                 row.append('maybe')
             else:
                 row.append('no')
-            if pref[2]==1 and pref[3] == 1: 
+            if pref[2]==1 and pref[3] == 1:
                 row.append('yes')
-            elif pref[2] == 0:
+            elif pref[3] == 1:
                 row.append('maybe')
             else:
                 row.append('no')
@@ -252,7 +294,7 @@ def preferences_md(request):
     }
     return HttpResponse(template.render(context, request))
 
-def preferences_generate(request): 
+def preferences_generate(request):
     # update pieces and users with new assignment
     username_list = [user.username for user in User.objects.all()]
     for piece in Piece.objects.all():
@@ -261,45 +303,53 @@ def preferences_generate(request):
         for i in range(piece.num_pianists):
             query = piece.name + ' '+str(i+1)
             username = request.POST[query].strip()
-            if username in username_list: # no whitespace or empty strings 
+            user = None
+            if username in username_list: # no whitespace or empty strings
                 user = User.objects.get(username = username)
+            elif first_uppercase(username) in username_list: # no longer case sensitive hopefully
+                user = User.objects.get(username = first_uppercase(username))
+            elif first_last_uppercase(username) in username_list:
+                user = User.objects.get(username = first_uppercase(username))
+            if user is not None:
                 performer_list.append(user)
-            performer_string += username + ', '
+                performer_string += user.username + ', '
+            else:
+                performer_string += username + ', '
         piece.performers.set(performer_list)
         if performer_string != '':
-            performer_string = performer_string[:-2] # remove last comma space 
+            performer_string = performer_string[:-2] # remove last comma space
         piece.performer_string = performer_string
         # calculate size of group (arrangers + performers)
         size = len(piece.performers.all())
         for arranger in piece.arrangers.all():
             if arranger not in piece.performers.all():
                 size += 1
-        piece.group_size = size 
+        piece.group_size = size
         piece.save()
-    # create df 
+    # create df
     hard = request.POST['hard']
     multiple = request.POST['multiple']
     columns_initial = ['hard', 'expHard','multiple','expMultiple']
-    piece_names = [piece.name for piece in Piece.objects.all()] 
-    piece_names.sort() # making sure the order is consistent with preferences order 
-    columns = columns_initial + piece_names 
+    piece_names = [piece.name for piece in Piece.objects.all()]
+    piece_names.sort() # making sure the order is consistent with preferences order
+    columns = columns_initial + piece_names
     rows_initial = ['easy parts', 'hard parts']
     rows = rows_initial.copy()
-    # depending on expMultiple or multiple, people get a row or not 
+    # depending on expMultiple or multiple, people get a row or not
     schedule = Schedule.objects.get(name = 'schedule')
-    for user in User.objects.all(): 
-        if user.profile.pref_updated < schedule.pref_reset: # ignore people who didn't fill out the form 
-            continue 
+    for user in User.objects.all():
+        if user.profile.pref_updated < schedule.pref_reset: # ignore people who didn't fill out the form
+            continue
         pref = str_to_int_list(user.profile.pref)
         if len(pref) != len(columns): # if not default then set to all 0
             pref = [0 for i in columns]
         if len(user.playing.all()) > 1: # no more pieces for them
-            continue 
-        if len(user.playing.all()) == 1: 
+            continue
+        if len(user.playing.all()) == 1:
             if multiple == 'multiple' and pref[2] == 0: # multiple only for those who specifically asked for it
                 continue
             if multiple == 'expMultiple' and pref[3] == 0: # multiple if necessary
-                continue 
+                continue
         rows.append(user.username)
     df = pd.DataFrame(index = rows, columns = columns)
     for column in df.columns:
@@ -314,25 +364,25 @@ def preferences_generate(request):
         pref = str_to_int_list(user.profile.pref)
         if len(pref) != len(df.columns): # if not default then set to all 0
             pref = [0 for i in df.columns]
-        if user.username in df.index: 
+        if user.username in df.index:
             df.loc[user.username] = pref
-            if len(user.playing.all()) == 1: # if they're already on multiple they don't get 3 AND they can't be on a piece they're already playing! 
+            if len(user.playing.all()) == 1: # if they're already on multiple they don't get 3 AND they can't be on a piece they're already playing!
                 df.at[user.username, 'multiple'] = 0
                 df.at[user.username, 'expMultiple'] = 0
         for piece in user.playing.all():
             # if they are willing to play a hard part and one exists, assume they get it
-            if ((hard == 'hard' and pref[0] == 1) or (hard == 'expHard' and pref[1] == 1)) and (df.at['hard parts', piece.name] > 0): 
+            if ((hard == 'hard' and pref[0] == 1) or (hard == 'expHard' and pref[1] == 1)) and (df.at['hard parts', piece.name] > 0):
                 df.at['hard parts', piece.name] -= 1
             elif df.at['easy parts', piece.name] > 0:
-                df.at['easy parts', piece.name] -= 1 
+                df.at['easy parts', piece.name] -= 1
             else: # bug prevention. hopefully you never give people hard parts they didn't ask for
                 df.at['hard parts', piece.name] -= 1
             if user.username in df.index:
-                df.at[user.username, piece.name] = 0 # they can't play multiple parts of the same piece 
+                df.at[user.username, piece.name] = 0 # they can't play multiple parts of the same piece
     # generate suggestions
     m = Matching(df, hard, multiple)
     full_string = ''
-    for i in range(10): 
+    for i in range(10):
         m.shuffle()
         pairs = m.match_all()
         m_string = ''
@@ -346,7 +396,7 @@ def preferences_generate(request):
             for person in group:
                 piece_string += person + ', '
             if piece_string[-2] == ',':
-                piece_string = piece_string[:-2] # take off last comma 
+                piece_string = piece_string[:-2] # take off last comma
             m_string += piece_string + ';'
         full_string += m_string + '.'
     schedule.matching_string = full_string
@@ -379,7 +429,7 @@ def availability(request):
     return HttpResponse(template.render(context, request))
 
 def update_piece_availability(piece):
-    # modify later to separate arrangers vs no arrangers 
+    # modify later to separate arrangers vs no arrangers
     new_list = empty_list.copy()
     # also calculate the piece group size at some point
     for user in piece.performers.all():
@@ -388,7 +438,7 @@ def update_piece_availability(piece):
         for i in range(len(new_list)):
             new_list[i] += int(data_list[i])
     for user in piece.arrangers.all():
-        if user not in piece.performers.all(): 
+        if user not in piece.performers.all():
             stripped = user.profile.availability[1:-1] # remove [ and ]
             data_list = stripped.split(',') # BY ROW!!!! EVEN THOUGH ITS WEIRD
             for i in range(len(new_list)):
@@ -452,7 +502,7 @@ def availability_view(request, name):
         arrangers = thing.arrangers.all()
         performers = thing.performers.all()
         template = loader.get_template('app/availability_view.html')
-    else: # mcalpin 
+    else: # mcalpin
         data_str = thing.availability
         arrangers = []
         performers = []
@@ -466,7 +516,7 @@ def availability_view(request, name):
     if category == 'piece':
         # get number of people in the group including arrangers
         size = len(performers)
-        for a in arrangers: 
+        for a in arrangers:
             if a not in performers:
                 size += 1
         incr = 255//(size + 1)
@@ -474,18 +524,18 @@ def availability_view(request, name):
             g = 255-i*incr
             rgb = 65536*g + 256*255 + g
             colors.append('#{0:0=6x}'.format(rgb)) # hex code for colours going from white to green
-        colors[size] = '#00cc00' # make sure this is darkest 
+        colors[size] = '#00cc00' # make sure this is darkest
     else:
         colors = ['#ffffff', '#00cc00']
     data_colors = []
-    data_ints = str_to_int_list(data_str) 
+    data_ints = str_to_int_list(data_str)
     for i in range(len(times)):
         sublist = data_list[7*i:7*(i+1)]
         triples = [(days[j], sublist[j], colors[data_ints[7*i + j]]) for j in range(7)]
         data_colors.append((times[i], triples))
     context = {
         'user': request.user,
-        'thing':name, 
+        'thing':name,
         'is_user': (category == 'user'),
         'data_str': data_str,
         'data_list': data_list,
@@ -534,21 +584,30 @@ def schedule(request):
     data_list, data_2d = read_string_to_lists(data_str)
     piece_names = [piece.name for piece in Piece.objects.all()]
     data_colors = []
+    sublist = ['', '', '', '', '', '', ''] # will become first previous sublist
     for i in range(len(times)):
+        prev_sublist = sublist # update
         sublist = data_list[7*i:7*(i+1)]
         triples = []
         for j in range(7):
-            possible_string = '' # potentially the last word is a room number 
+            possible_string = '' # potentially the last word is a room number
             split = sublist[j].split()
             if len(split) > 1:
                 for k in range(len(split)-1):
-                    possible_string += split[k]
+                    possible_string += split[k] + ' '
+            possible_string = possible_string.strip()
             if sublist[j] in piece_names:
                 piece = Piece.objects.get(name = sublist[j])
-                triples.append((days[j], sublist[j], piece.color))
+                if prev_sublist[j] == sublist[j]: # only show name if it's the first instance
+                    triples.append((days[j], '', piece.color))
+                else:
+                    triples.append((days[j], sublist[j], piece.color))
             elif possible_string in piece_names:
                 piece = Piece.objects.get(name = possible_string)
-                triples.append((days[j], sublist[j], piece.color))
+                if prev_sublist[j] == sublist[j]: # only show name if it's the first instance
+                    triples.append((days[j], '', piece.color))
+                else:
+                    triples.append((days[j], sublist[j], piece.color))
             else:
                 triples.append((days[j], sublist[j], '#ffffff'))
         data_colors.append((times[i], triples))
@@ -575,21 +634,30 @@ def schedule_md(request):
     data_list, data_2d = read_string_to_lists(data_str)
     piece_names = [piece.name for piece in Piece.objects.all()]
     data_colors = []
+    sublist = ['', '', '', '', '', '', ''] # will become first previous sublist
     for i in range(len(times)):
+        prev_sublist = sublist # update
         sublist = data_list[7*i:7*(i+1)]
         triples = []
         for j in range(7):
-            possible_string = '' # potentially the last word is a room number 
+            possible_string = '' # potentially the last word is a room number
             split = sublist[j].split()
             if len(split) > 1:
                 for k in range(len(split)-1):
-                    possible_string += split[k]
+                    possible_string += split[k] + ' '
+            possible_string = possible_string.strip()
             if sublist[j] in piece_names:
                 piece = Piece.objects.get(name = sublist[j])
-                triples.append((days[j], sublist[j], piece.color))
+                if prev_sublist[j] == sublist[j]: # only show name if it's the first instance
+                    triples.append((days[j], '', piece.color))
+                else:
+                    triples.append((days[j], sublist[j], piece.color))
             elif possible_string in piece_names:
                 piece = Piece.objects.get(name = possible_string)
-                triples.append((days[j], sublist[j], piece.color))
+                if prev_sublist[j] == sublist[j]: # only show name if it's the first instance
+                    triples.append((days[j], '', piece.color))
+                else:
+                    triples.append((days[j], sublist[j], piece.color))
             else:
                 triples.append((days[j], sublist[j], '#ffffff'))
         data_colors.append((times[i], triples))
@@ -631,15 +699,15 @@ def schedule_new(request):
 
 
 def schedule_generate(request):
-    # get data from form and set up DF 
-    # columns of DF are the unneeded ones and the available mcalpin times as indices 
+    # get data from form and set up DF
+    # columns of DF are the unneeded ones and the available mcalpin times as indices
     schedule = Schedule.objects.get(name = 'schedule')
     columns = ['hard', 'expHard', 'multiple', 'expMultiple']
     mcalpin_list, mcalpin_2d = read_string_to_lists(schedule.availability)
-    for i in range(len(mcalpin_list)): 
+    for i in range(len(mcalpin_list)):
         if mcalpin_list[i] == '1':
             columns.append(str(i))
-    # rows of DF are one row per hour of rehearsal per piece 
+    # rows of DF are one row per hour of rehearsal per piece
     rows = ['hard parts', 'easy parts']
     for piece in Piece.objects.all():
         hours = request.POST[piece.name + '_hours']
@@ -673,16 +741,16 @@ def schedule_generate(request):
             if available:
                 data.at[row, column] = 1
             else:
-                data.at[row, column] = 0    
+                data.at[row, column] = 0
     # generate partial matching using the piece assignments code
     m = Matching(data)
     m.shuffle()
     p = PartialMatching(m.left, m.right, m.null, m)
-    # convert to schedule 
+    # convert to schedule
     schedule_list = none_list.copy() # start with empty schedule
     for pair in p.pairs:
         timeslot = int(pair[0])
-        piece = pair[1].split()[0] # take out number 
+        piece = pair[1].split()[0] # take out number
         schedule_list[timeslot] = piece
     schedule.pieces = str(schedule_list)
     schedule.save()

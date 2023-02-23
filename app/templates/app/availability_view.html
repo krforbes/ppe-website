@@ -2,7 +2,7 @@
 
 {% block title %} {{thing}}'s availability {% endblock %}
 
-{% block content %} 
+{% block content %}
 
 <table class = 'schedule'>
     <tr>
@@ -13,8 +13,10 @@
     </tr>
 
     {% for time, row in data_colors %}
-        <tr>
-            <th class = 's schedule_left'>{{time}}</th>
+        <tr {% if '00' in time %} class = 'top_border' {% endif %}>
+            {% if '00' in time %}
+            <th class = 'schedule_left' rowspan = 4 >{{time}}</th>
+            {% endif %}
             {% for day, block, color in row %}
             <td style = 'background-color: {{color}}; color: {{color}}'>
                 <button class = "block {{block}} {{color}}" id="block_{{day}}_{{time}}" name = "{{day}} {{time}}", style = 'background-color: {{color}}; color: {{color}}'>{{block}}</button>
@@ -30,17 +32,17 @@
     (Arrays that Javascript needs to access)
     <div class = 'mcalpin'>{{mcalpin}}</div>
     <div class = 'days'>{{days}}</div>
-    <div class = 'times'>{{times}}</div> 
+    <div class = 'times'>{{times}}</div>
 </div>
 
 <script>
     function to_array(input_str){
-        no_quotes = input_str.replaceAll('\'', '') // no quotes 
+        no_quotes = input_str.replaceAll('\'', '') // no quotes
         no_spaces = no_quotes.replaceAll(' ', '')
         stripped = no_spaces.slice(1, -1);
         return stripped.split(',');
     }
-    // idk why but if I try to merge queryselector into the function it crashes so here are 3 long lines 
+    // idk why but if I try to merge queryselector into the function it crashes so here are 3 long lines
     mcalpin = to_array(document.querySelector('div.mcalpin').textContent)
     days = to_array(document.querySelector('div.days').textContent)
     times = to_array(document.querySelector('div.times').textContent)
@@ -58,12 +60,12 @@
                     block.style = 'background-color: #777777; color: #777777';
                 }
                 else { // this resets any other filters
-                    color = block.className.split(' ')[2] 
+                    color = block.className.split(' ')[2]
                     block.style = 'background-color: '+color+ '; color: '+color + ';';
                 }
             }
             else {
-                color = block.className.split(' ')[2] 
+                color = block.className.split(' ')[2]
                 block.style = 'background-color: '+color+ '; color: '+color + ';';
             }
         }
@@ -72,7 +74,7 @@
 </script>
 {% endif %}
 
-{% if is_user %} 
+{% if is_user %}
 <p>Last updated: {{user.profile.availability_updated}}</p>
 {% endif %}
 

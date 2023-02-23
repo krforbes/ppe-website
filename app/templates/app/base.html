@@ -13,15 +13,15 @@
   {% if user.profile.cursed_with_comic_sans %}<div id = 'comic-sans'>{% endif %}
   <div id = 'top'>
     nothing to see here
-    <div  class = 'menu-account'><p> Hello {{user.username}} 
+    <div  class = 'menu-account'><p> Hello {{user.username}}
       <a class = 'smaller-link' href ="{% url 'change_password_setup' %}">Change password</a>
       <a class = 'smaller-link' href ="{% url 'logout_action' %}">Logout</a></p>
      </div>
-     
+
   </div>
     {% block menu %}
   <div id ='menu-block'>
-  <div id="menu"> 
+  <div id="menu">
   <a class = 'menu-link' href ="{% url 'schedule' %}"><div  class = 'menu-element'><p>Schedule</p></div></a>
   <a class = 'menu-link' href ="{% url 'library' %}"><div  class = 'menu-element'><p>PPE Library</p></div></a>
   <a class = 'menu-link' href ="{% url 'preferences' %}"><div  class = 'menu-element'><p>Piece preference form</p></div></a>
@@ -42,7 +42,7 @@
 
 
     <div id="content-box">
-    <div id="content"> 
+    <div id="content">
 	{% block content %} this is a page {% endblock %}
     </div>
     </div>

@@ -2,8 +2,30 @@
 
 {% block title %} Schedule rehearsals {% endblock %}
 
-{% block content %} 
+{% block content %}
 
+
+<table class = 'schedule'>
+    <tr>
+        <th class = 'schedule_left unselectable'>  </th>
+        {% for day in days %}
+        <th class = 'unselectable'>{{day}}</th>
+        {% endfor %}
+    </tr>
+
+    {% for time, row in data_colors %}
+        <tr class = 'unselectable'>
+            {% if '00' in time %}
+            <th class = 'schedule_left' rowspan = 4 >{{time}}</th>
+            {% endif %}
+            {% for day, block, color in row %}
+            <td id = 'wrapper_{{day}}_{{time}}' {% if '00' in time %} class = 'top_border' {% endif %} style = 'background-color: {{color}}; {% if color != "#ffffff" %}border-bottom: none; border-top: none;{% endif %}'>
+                <div class = "block {{color}} unselectable" id="{{day}}_{{time}}" name = "{{day}} {{time}}" style = 'font-size: 90%; background-color: {{color}};' >{{block}}</div>
+            </td>
+            {% endfor %}
+        </tr>
+    {% endfor %}
+</table><br>
 
 
 <datalist id = 'pieces'>
@@ -13,39 +35,31 @@
     {% endfor %}
 </datalist>
 
-<form action = "{% url 'save_schedule'%}" id = 'save' method = 'post'> 
-{% csrf_token %}
-<table class = 'schedule'>
-    <tr>
-        <th class = 'schedule_left'>  </th>
-        {% for day in days %}
-        <th>{{day}}</th>
-        {% endfor %}
-    </tr>
 
-    {% for time, row in data_colors %}
-        <tr>
-            <th class = 'schedule_left'>{{time}}</th>
-            {% for day, block, color in row %}
-            <td style = 'background-color: {{color}}'>
-                <input type = 'text' class = "block {{color}}" id="block_{{day}}_{{time}}" list = "pieces" name = "{{day}} {{time}}" value = "{{block}}" style = "background-color: {{color}}" />
-            </td>
-            {% endfor %}
-        </tr>
-    {% endfor %}
-</table>
-</form>
 <button class = 'mcalpin hover_button'>mcalpin</button>{% for piece in piece_list %}<button class = 'button_{{piece.name}} hover_button'>{{piece.name}}</button>{% endfor %}
-<br> 
-
-<button form = 'save' class = 'clickable'>Save</button>
 <br>
+
+<input type = 'text' id = 'input_piece_name' class = 'clickable' placeholder = 'Enter piece name' />
+<button form = 'save' id = 'save_button' class = 'clickable'>Save</button>
+<br>
+
+
+<form action = "{% url 'save_schedule'%}" id = 'save' method = 'post'>
+{% csrf_token %}
+{% for time, row in data_2d %}
+    {% for day, block in row %}
+        <input type = 'hidden' id="input_{{day}}_{{time}}" name = "{{day}} {{time}}" value = "{{block}}" />
+
+    {% endfor %}
+
+{% endfor %}
+</form>
 
 <div class = 'secret'>
     (Arrays that Javascript needs to access)
     <div class = 'mcalpin'>{{mcalpin}}</div>
     <div class = 'days'>{{days}}</div>
-    <div class = 'times'>{{times}}</div> 
+    <div class = 'times'>{{times}}</div>
     <div class = 'piece_names'>{{piece_names}}</div>
     {% for piece in piece_list %}
     <div class = '{{piece.name}}_max'>{{piece.group_size}}</div>
@@ -54,15 +68,63 @@
 </div>
 
 
-
 <script>
+    updating = false;
+    function start_updating(block){
+        updating = !updating;
+        update_value(block)
+    }
+    function update_value(block) {
+        if (!updating) {
+            return
+        }
+        day_time = block.id // format #input_Monday_7\\:00 for example
+        split = day_time.split(':')
+        // input_query = '#input_'+split[0] + '\\:' + split[1]
+        // hidden_input = document.querySelector(input_query)
+        wrapper_query = '#wrapper_'+split[0]+'\\:'+split[1]
+        wrapper = document.querySelector(wrapper_query)
+        block.className = String(block.className)+' selected'
+        block.style = 'font-size: small; background-color: #00cc00;'
+        wrapper.style = 'background-color: #00cc00;'
+
+    }
+    const blocks = document.querySelectorAll('div.block');
+    //save_button = document.querySelector('#save_button')
+    //save_button.textContent = 'hi'
+    // saves values into inputs when they are inputted into the one box
+    input_piece_name = document.querySelector("#input_piece_name")
+    function update_inputs(){
+        piece_name = input_piece_name.value
+        for (const block of blocks){
+            if (block.classList.contains('selected')){
+                day_time = String(block.id) // format #input_Monday_7\\:00 for example
+                split = day_time.split(':')
+                input_query = '#input_'+split[0] + '\\:' + split[1]
+                hidden_input = document.querySelector(input_query)
+                hidden_input.value = piece_name
+            }
+
+        }
+    }
+    input_piece_name.addEventListener('keyup', update_inputs)
+    input_piece_name.addEventListener('click', update_inputs)
+    for (const block of blocks) {
+        block.addEventListener("click", function () { update_value(block);});
+        block.addEventListener('mousedown', function () { start_updating(block); })
+        block.addEventListener('mouseup', function() {updating = false; })
+        block.addEventListener("mouseenter", function () { update_value(block); });
+    }
+
+
+    // for hovering over things and seeing them
     function to_array(input_str){
-        no_quotes = input_str.replaceAll('\'', '') // no quotes 
+        no_quotes = input_str.replaceAll('\'', '') // no quotes
         no_spaces = no_quotes.replaceAll(' ', '')
         stripped = no_spaces.slice(1, -1);
         return stripped.split(',');
     }
-    // idk why but if I try to merge queryselector into the function it crashes so here are 3 long lines 
+    // idk why but if I try to merge queryselector into the function it crashes so here are 3 long lines
     mcalpin = to_array(document.querySelector('div.mcalpin').textContent)
     days = to_array(document.querySelector('div.days').textContent)
     times = to_array(document.querySelector('div.times').textContent)
@@ -72,27 +134,37 @@
     button_mcalpin = document.querySelector('button.mcalpin');
     function update_hidden(button, availability, max) {
         hidden = !hidden;
-        blocks = document.querySelectorAll('input.block')
+        // input_blocks = document.querySelectorAll('input.block')
         for (const block of blocks){
             if (hidden){
-                day = block.name.split(' ')[0]
-                time = block.name.split(' ')[1]
+                id = String(block.id)
+                day = id.split('_')[0]
+                time = id.split('_')[1]
                 num = 7*times.indexOf(time) + days.indexOf(day)
-                if (availability[num] != max){ // if mcalpin is not available hide it
+                if (availability[num] != max){ // if not available hide it
                     block.style = 'background-color: #999999; color: #999999';
                 }
                 else { // this resets any other filters
-                    color = block.className.split(' ')[1] 
+                    if (block.classList.contains('selected')){
+                        color = '#00cc00'
+                    }
+                    else{
+                        color = block.className.split(' ')[1]
+                    }
                     block.style = 'background-color: '+color+ ';';
                 }
             }
             else {
-                color = block.className.split(' ')[1] 
+                if (block.classList.contains('selected')){
+                    color = '#00cc00'
+                }
+                else{
+                    color = block.className.split(' ')[1]
+                }
                 block.style = 'background-color: '+color+ ';';
             }
         }
     }
-    
     button_mcalpin.addEventListener("mouseenter", function () {update_hidden(button_mcalpin, mcalpin, 1)});
     button_mcalpin.addEventListener("mouseleave", function () {update_hidden(button_mcalpin, mcalpin, 1)});
     for (const piece of pieces){
@@ -104,4 +176,4 @@
     }
 </script>
 
-{% endblock %} 
+{% endblock %}

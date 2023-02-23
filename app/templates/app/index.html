@@ -1,8 +1,10 @@
 {% extends "app/base.html" %}
 
-{% block title %} Main index {% endblock %}
+{% block title %} PPE Member Portal {% endblock %}
 
-{% block content %} 
-<p> hello and welcome to the ppe member portal version 2 </p> 
+{% block content %}
+<p> hello and welcome to the ppe member portal version 2 </p>
 
-{% endblock %} 
+{% for piece in pieces %}<p><a href = {%url 'availability_view' piece.name %}>{{piece.name}}</a></p> {% endfor %}
+
+{% endblock %}

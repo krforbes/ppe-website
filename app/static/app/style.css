@@ -1,17 +1,25 @@
 
 #main-block {
-    font-family: Arial, Helvetica, sans-serif; 
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 #comic-sans {
     font-family: 'Comic Sans MS', fantasy;
 }
+.schedule{
+    background-color: orange; /* was 222222 */
+}
+
+tr{
+    height: 5px;
+    overflow: visible;
+}
 td{
     background-color: white;
-    padding: 0px;
-    overflow: hidden;
+    /*padding: 0px;*/
     font-size: small;
-    height: 20px;
+    height: 5px;
+    overflow: visible;
 }
 
 .block{
@@ -19,14 +27,15 @@ td{
     width: 100px;
     border-width: 0px;
     margin-left: 3px;
-    font-size:small;
-    overflow: scroll;
-    height: 20px;
+    height: 5px;
+    overflow: visible;
 
 }
 
 th{
-    background-color: white;
+    background-color: lightblue;
+    height: 5px;
+    overflow: visible;
 }
 
 .schedule_left{
@@ -144,9 +153,7 @@ th{
     width: 785px;
 }
 
-.schedule{
-    background-color: #222222;
-}
+
 
 .secret{
     display: none;
@@ -179,7 +186,7 @@ th{
     height: 150px;
 }
 #suggested_matchings{
-    background-color: rgb(255, 208, 215); 
+    background-color: rgb(255, 208, 215);
     position: absolute;
     left: 50%;
     top: 0%;
@@ -212,12 +219,12 @@ th{
 }
 
 .input_box{
-    width: 100px; 
+    width: 100px;
 }
 
 .clickable{
     border-color: #555555;
-    border-width: 2px; 
+    border-width: 2px;
     border-style: solid;
     width: 200px;
     height: 30px;
@@ -317,7 +324,7 @@ th{
     width: 500px;
     font-family: 'Times New Roman', Times, serif;
     font-style: italic;
-    
+
 }
 
 #answer{
@@ -343,7 +350,6 @@ th{
 }
 
 #wrong, #close{
-    background-color: lightcoral;
     padding: 5px;
     position: absolute;
     width: 200px;
@@ -351,12 +357,19 @@ th{
     bottom: -20px;
 }
 
+#wrong{
+    background-color: lightcoral;
+}
+#close{
+    background-color: gold;
+}
+
 #riddle_title{
     background-color: white;
     position: absolute;
     top: -21px;
     left:288px;
-    font-size:x-large; 
+    font-size:x-large;
     /* width: 110px;*/
     padding: 5px;
     color: blue;

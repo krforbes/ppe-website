@@ -15,10 +15,12 @@
 
     {% for time, row in data_colors %}
         <tr>
-            <th class = 'schedule_left'>{{time}}</th>
+            {% if '00' in time %}
+            <th class = 'schedule_left' rowspan = 4 >{{time}}</th>
+            {% endif %}
             {% for day, block, color in row %}
-            <td style = 'background-color: {{color}}'>
-                <div class = "block {{block}}" id="block_{{day}}_{{time}}" name = "{{day}} {{time}}" style = 'font-size: small; background-color: {{color}}'>{{block}}</div>
+            <td {% if '00' in time %} class = 'top_border' {% endif %} style = 'background-color: {{color}}; {% if color != "#ffffff" %}border-bottom: none;border-top: none; {% endif %}'>
+                <div class = "block {{block}}" id="block_{{day}}_{{time}}" name = "{{day}} {{time}}" style = 'font-size: 90%; background-color: {{color}};'>{{block}}</div>
             </td>
             {% endfor %}
         </tr>
@@ -28,4 +30,4 @@
 
 
 
-{% endblock %} 
+{% endblock %}

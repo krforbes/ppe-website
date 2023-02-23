@@ -2,22 +2,20 @@
 {% load static %}
 {% block title %} what are you doing here {% endblock %}
 
-{% block content %} 
+{% block content %}
 
 {% if comic_sans %}
-<p> You aren't the MD! You shouldn't be on this page! </p>
+<p> This page is forbidden. A curse has been cast on your account. </p>
 {% endif %}
 
 {% if riddles %}
-<div id = 'start_text'>
-    You aren't the MD! To continue you must answer three riddles. <br> 
-</div>
+
 
 <div id = 'riddle_block'>
     <div id = 'riddle_title'>Riddle #1</div>
     <p>
     <div id = 'riddle_1' class = 'riddle'>
-        What is always in front of you, but can never be seen?
+        What is always ahead of you, but can never be seen?
     </div>
     <div id = 'riddle_2' class = 'riddle secret'><div id = 'riddle_2_text'>Qjgi nvfef vr ijvr?</div><img id = 'musescore' src = "{% static 'app/riddle.png' %}"></div>
     <div id = 'riddle_3' class = 'riddle secret'> how are you so good </div>
@@ -25,7 +23,7 @@
     <p><input type = 'text' id = 'answer' value = '' /><br>
     <button id = 'check'>Check</button></p>
     <div id = 'wrong' class = 'secret'> this is wrong try again</div>
-    <div id = 'close' class = 'secret'> this is close! </div>
+    <div id = 'close' class = 'secret'> this is close! answer in code</div>
     <img id = 'success_cat' class = 'secret' src="{% static 'app/cat.png' %}">
 
     <form action = "{% url 'riddle_success' %}" method = 'post'>
@@ -36,8 +34,9 @@
 </div>
 
 <script>
+    alert("You shouldn't be on that page! Answer 3 riddles to continue.")
     stage = 1
-    start_text = document.querySelector('#start_text')
+    // start_text = document.querySelector('#start_text')
     title = document.querySelector('#riddle_title')
     riddle_1 = document.querySelector('#riddle_1')
     riddle_2 = document.querySelector('#riddle_2')
@@ -61,7 +60,7 @@
             stage += 1
             title.textContent = 'Zvbbkf #2'
             button.textContent = 'Ejfex'
-            start_text.className = 'secret'
+            // start_text.className = 'secret'
             }
             else{
                 wrong.className = ''
@@ -94,19 +93,16 @@
             end.className = ''
             title.className = 'secret'
             cat.className = ''
-            
+
             }
             else{
                 wrong.className = ''
             }
         }
         response.value = ''
-        
+
     }
 
-    function vanish_start_message(){
-        start_text.className = 'secret'
-    }
 
     button = document.querySelector('#check');
     button.addEventListener('click', update_riddle)

@@ -2,7 +2,7 @@
 
 {% block title %} Availability {% endblock %}
 
-{% block content %} 
+{% block content %}
 <table class = 'schedule'>
     <tr>
         <th class = 'schedule_left'>  </th>
@@ -12,27 +12,27 @@
     </tr>
 
     {% for time, row in data_2d %}
-        <tr>
-            <th class = 'schedule_left'>{{time}}</th>
+        <tr {% if '00' in time %} class = 'top_border' {% endif %}>
+            {% if '00' in time %}
+            <th class = 'schedule_left' rowspan = 4 >{{time}}</th>
+            {% endif %}
             {% for day, block in row %}
             <td class = 'is_{{block}}' id = "wrapper_{{day}}_{{time}}">
-                <button class = "block is_{{block}}" id = "{{day}}_{{time}}">{{block}}</button>
+                <button class = "block is_{{block}}" id = "{{day}}_{{time}}"></button>
             </td>
             {% endfor %}
         </tr>
     {% endfor %}
 </table>
 
-<form action = "{% url 'save_mcalpin'%}" method = 'post'> 
+<form action = "{% url 'save_mcalpin'%}" method = 'post'>
     {% csrf_token %}
-    <fieldset>
 
     {% for time, row in data_2d %}
         {% for day, block in row %}
             <input type = 'hidden' id = "input_{{day}}_{{time}}" name = "{{day}} {{time}}" value = "{{block}}">
         {% endfor %}
     {% endfor %}
-</fieldset>
 <input type="submit" class = 'clickable' value="Save">
 </form>
 
@@ -46,7 +46,7 @@
         if (!updating) {
             return
         }
-        day_time = block.id // format #input_Monday_7\\:00 for example 
+        day_time = block.id // format #input_Monday_7\\:00 for example
         split = day_time.split(':')
         input_query = '#input_'+split[0] + '\\:' + split[1]
         hidden_input = document.querySelector(input_query)
@@ -54,13 +54,11 @@
         wrapper = document.querySelector(wrapper_query)
         if (block.classList.contains("is_0")) {
             block.className = "block is_1"
-            block.textContent = "1"
             hidden_input.value = "1"
             wrapper.className = 'is_1'
         }
         else {
             block.className = "block is_0"
-            block.textContent = "0"
             hidden_input.value = "0"
             wrapper.className = 'is_0'
         }
@@ -86,7 +84,7 @@
 
         XHR.addEventListener('error', (event) => {
         alert('HOUSTON HOUSTON WE HAVE A PROBLEM');
-        }); 
+        });
 
         XHR.open('POST', "{% url 'save_availability' %}");
         XHR.send(FD);
@@ -120,7 +118,7 @@
     save_button.addEventListener('click', () => {
         sendData({test: 'ok'});
     });*/
-    
+
 </script>
 
-{% endblock %} 
+{% endblock %}

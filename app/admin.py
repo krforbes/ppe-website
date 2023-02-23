@@ -13,10 +13,11 @@ class ProfileInline(admin.StackedInline):
     model = Profile
     can_delete = False
     verbose_name_plural = 'profile'
-    fields = ['pref_updated', 'availability_updated']
+    fields = ['pref_updated', 'availability_updated', 'has_cat']
 
 class UserAdmin(BaseUserAdmin):
     inlines = (ProfileInline,)
+    list_display = ('username', 'last_login', 'profile')
 
 class PieceAdmin(admin.ModelAdmin):
     fieldsets = [
