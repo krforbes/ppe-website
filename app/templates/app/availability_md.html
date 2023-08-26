@@ -3,7 +3,7 @@
 {% block title %} View availability {% endblock %}
 
 {% block content %} 
-
+<div>
 <p><b>People who have not updated availability since the last reset:</b>
 {% for user in missing %}
 {{user.username}}
@@ -17,4 +17,5 @@
 <li><a href = "{% url 'availability_view' piece.name %}">{{piece.name}}</a></li>
 {% endfor %}
 </p>
+</div>
 {% endblock %}

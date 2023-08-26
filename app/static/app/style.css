@@ -68,7 +68,7 @@ th{
 
 #top{
     height: 70px;
-    width: 100%;
+    min-width: 100%;
     position: absolute;
     top: 0%;
     left: 0%;
@@ -77,15 +77,12 @@ th{
 
 .menu-account{
     background-color: #444444;
-    text-decoration: none;
-    position: absolute;
-    bottom: 0%;
-    right: 0%;
-    left: 78%;
     color: lightcyan;
+    text-align: right;
 }
 .menu-account p{
-    margin-left: 20%;
+    color: lightcyan;
+    margin-bottom: 0;
 }
 
 .menu-account a{
@@ -164,23 +161,13 @@ th{
     border: none;
 }
 
-#bottom-menu{
-    background-color: gold;
-    position: relative;
-    left:0%;
-}
 #comments{
     background-color: lemonchiffon;
     overflow-wrap: break-word;
-    position: absolute;
-    left: 0%;
     height: 150px;
 }
 #suggested_matchings{
     background-color: rgb(255, 208, 215);
-    position: absolute;
-    left: 50%;
-    top: 0%;
     height: 150px;
 }
 .box{
@@ -198,9 +185,7 @@ th{
 
 }
 #table-of-preferences{
-    position: absolute;
-    top: 164px;
-    width: 785px;
+    margin-top: 5%;
 }
 #pref_table{
     background-color: black;

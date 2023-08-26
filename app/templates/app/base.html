@@ -14,16 +14,16 @@
   <div id = 'main-block'>
   {% if user.profile.cursed_with_comic_sans %}<div id = 'comic-sans'>{% endif %}
   <div id = 'top'>
-    <div  class = 'menu-account'><p> Hello {{user.username}}
-      <a class = 'smaller-link' href ="{% url 'change_password_setup' %}">Change password</a>
-      <a class = 'smaller-link' href ="{% url 'logout_action' %}">Logout</a></p>
+    <div  class = 'menu-account'><p style="margin-right: 5%;">Hello {{user.username}}</p>
+      <a href ="{% url 'change_password_setup' %}">Change password</a>
+      <a style="margin-right: 5%;" href ="{% url 'logout_action' %}">Logout</a>
      </div>
 
   </div>
   <div class="d-flex flex-row">
     {% block menu %}
-  <div id ='menu-block' class="d-flex align-items-center">
-  <div class="d-flex flex-column align-items-stretch flex-shrink-0 mx-3" style="flex: 1;">
+  <div id ='menu-block' class="d-flex">
+  <div class="d-flex flex-column align-items-stretch flex-shrink-0 mx-3" style="flex: 1; margin-top: 50%;">
   <div id="list-group list-group-flush">
     <div class = 'list-group-item-action py-3 my-2 container menu-element'><a href ="{% url 'schedule' %}"><h3>Schedule</h3></a></div>
     <div class = 'list-group-item-action py-3 my-2 container menu-element'><a href ="{% url 'library' %}"><h3>PPE Library</h3></a></div>
