@@ -1,55 +1,61 @@
 {% load static %}
 
-<link rel="stylesheet" href="{% static 'app/style.css' %}">
-
 <!DOCTYPE html>
 <html lang="en-US">
   <head>
     <meta charset="utf-8" />
     <title>{% block title %} website {% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+<link rel="stylesheet" href="{% static 'app/style.css' %}">
+  <style>
+  </style>
   </head>
   <body>
   <div id = 'main-block'>
   {% if user.profile.cursed_with_comic_sans %}<div id = 'comic-sans'>{% endif %}
   <div id = 'top'>
-    nothing to see here
     <div  class = 'menu-account'><p> Hello {{user.username}}
       <a class = 'smaller-link' href ="{% url 'change_password_setup' %}">Change password</a>
       <a class = 'smaller-link' href ="{% url 'logout_action' %}">Logout</a></p>
      </div>
 
   </div>
+  <div class="d-flex flex-row">
     {% block menu %}
-  <div id ='menu-block'>
-  <div id="menu">
-  <a class = 'menu-link' href ="{% url 'schedule' %}"><div  class = 'menu-element'><p>Schedule</p></div></a>
-  <a class = 'menu-link' href ="{% url 'library' %}"><div  class = 'menu-element'><p>PPE Library</p></div></a>
-  <a class = 'menu-link' href ="{% url 'preferences' %}"><div  class = 'menu-element'><p>Piece preference form</p></div></a>
-  <a class = 'menu-link' href ="{% url 'availability' %}"><div  class = 'menu-element'><p>Availability</p></div></a>
+  <div id ='menu-block' class="d-flex align-items-center">
+  <div class="d-flex flex-column align-items-stretch flex-shrink-0 mx-3" style="flex: 1;">
+  <div id="list-group list-group-flush">
+    <div class = 'list-group-item-action py-3 my-2 container menu-element'><a href ="{% url 'schedule' %}"><h3>Schedule</h3></a></div>
+    <div class = 'list-group-item-action py-3 my-2 container menu-element'><a href ="{% url 'library' %}"><h3>PPE Library</h3></a></div>
+    <div class = 'list-group-item-action py-3 my-2 container menu-element'><a href ="{% url 'preferences' %}"><h3>Piece preference form</h3></a></div>
+    <div class = 'list-group-item-action py-3 my-2 container menu-element'><a href ="{% url 'availability' %}"><h3>Availability</h3></a></div>
   {%block md_menu %}
   {% if user.is_staff %}
-  <div id = 'md_menu'>
-  <a class = 'menu-link' href ="{% url 'schedule_md' %}"><div  class = 'menu-element'><p>Edit schedule</p></div></a>
-  <a class = 'menu-link' href ="{% url 'availability_md' %}"><div  class = 'menu-element'><p>See availabilities</p></div></a>
-  <a class = 'menu-link' href ="{% url 'preferences_md' %}"><div  class = 'menu-element'><p>Assign pieces</p></div></a>
-  <a class = 'menu-link' href = "{% url 'go_to_admin_site' %}"><div  class = 'menu-element'><p>Admin page</p></div></a>
-</div>
+  <div class = 'list-group-item-action py-3 my-2 container menu-element'><a href ="{% url 'schedule_md' %}"><h3>Edit schedule</h3></a></div>
+  <div class = 'list-group-item-action py-3 my-2 container menu-element'><a href ="{% url 'availability_md' %}"><h3>See availabilities</h3></a></div>
+  <div class = 'list-group-item-action py-3 my-2 container menu-element'><a href ="{% url 'preferences_md' %}"><h3>Assign pieces</h3></a></div>
+  <div class = 'list-group-item-action py-3 my-2 container menu-element'><a href = "{% url 'go_to_admin_site' %}"><h3>Admin page</h3></a></div>
+
 {% endif %}
 {% endblock %}
-  </div> </div>
+</div>
+</div>
+  </div> 
   {% endblock %}
 
 
 
-    <div id="content-box">
-    <div id="content">
+    <div id="content-box" class="container">
+    <div id="content" class="mx-3 my-3">
 	{% block content %} this is a page {% endblock %}
+    </div>
     </div>
     </div>
 {% if user.profile.has_cat %}
   <img id = 'cat' src="{% static 'app/cat.png' %}">
 {% endif %}
-  {% if curse_of_comic_sans %}</div>{% endif %}
+  {% if user.profile.cursed_with_comic_sans %}</div>{% endif %}
 </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
   </body>
 </html>

@@ -104,38 +104,17 @@ th{
 }
 
 #menu-block{
-    background-color: #444444;
-    color: #444444;
-    width: 27%;
-    position: absolute;
-    top: 15%;
-    left: 0%;
-    height: 85%;
-}
-#menu{
-    background-color: #2bc32b;
-    position: absolute;
-    left: 29%;
-    top: 0%;
-    width: 71%;
-    height: 100%;
-    border-width: 2px;
-    border-color: #444444;
-}
-
-.menu-element{
-    border-width: 2px;
-    border-color: #444444;
-    border-style:solid;
-    text-decoration: none;
+    background-color: #ffffff;
+    color: #ffffff;
+    max-width: 20%;
 }
 
 .menu-element:hover{
     background-color: lightcyan;
 }
 
-.menu-element p{
-    margin-left: 20%;
+.menu-element h3 {
+    margin: auto;
     font-size: 120%;
     text-decoration: none;
 }

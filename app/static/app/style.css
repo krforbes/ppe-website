@@ -1,6 +1,14 @@
+html {
+    min-height: 100vh;
+}
+
+body {
+    min-height: 100vh;
+}
 
 #main-block {
     font-family: Arial, Helvetica, sans-serif;
+    min-height: 100vh;
 }
 
 #comic-sans {
@@ -59,8 +67,7 @@ th{
 }
 
 #top{
-    background-color: #444444;
-    height: 15%;
+    height: 70px;
     width: 100%;
     position: absolute;
     top: 0%;
@@ -69,6 +76,7 @@ th{
 }
 
 .menu-account{
+    background-color: #444444;
     text-decoration: none;
     position: absolute;
     bottom: 0%;
@@ -94,40 +102,29 @@ th{
 
 #menu-block{
     background-color: #444444;
-    width: 27%;
-    position: absolute;
-    top: 15%;
-    left: 0%;
-    height: 85%;
-}
-#menu{
-    background-color: #2bc32b;
-    position: absolute;
-    left: 29%;
-    top: 0%;
-    width: 71%;
-    height: 100%;
+    min-width: 20%;
+    max-width: 30%;
+    min-height: 100vh;
 }
 
 .menu-element{
-    border-width: 2px;
-    border-color: #444444;
-    border-style:solid;
-    text-decoration: none;
+    background-color: white;
+    border: 2px solid white;
+    border-radius: 7px;
 }
 
 .menu-element:hover{
     background-color: lightcyan;
 }
 
-.menu-element p{
-    margin-left: 20%;
+.menu-element h3{
+    margin-left: 5%;
     font-size: 120%;
-    text-decoration: none;
+    margin-bottom: 0px;
 }
 
 .menu-link{
-    text-decoration: none;
+
     color: rgb(80, 19, 136);
 }
 
@@ -135,22 +132,16 @@ th{
 
 
 #content-box{
-    position: absolute;
-    top: 15%;
-    left: 27%;
-    right: 0%;
-    bottom: 0%;
-    overflow: scroll;
+    margin-top: 5%;
+    width: 100%;
     /*display: flex;
     /* align-items: center;
     justify-content: center;*/
 }
 
 #content{
-    position: absolute;
-    top: 7%;
-    left: 7%;
-    width: 785px;
+    display: flex;
+    justify-content: center;
 }
 
 
