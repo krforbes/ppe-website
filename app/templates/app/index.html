@@ -3,8 +3,9 @@
 {% block title %} PPE Member Portal {% endblock %}
 
 {% block content %}
+<div>
 <p> hello and welcome to the ppe member portal version 3 </p>
 
-{% for piece in pieces %}<p><a href = {%url 'availability_view' piece.name %}>{{piece.name}}</a></p> {% endfor %}
-
+{% for piece in pieces %}<p style="text-align: center;"><a href = {%url 'availability_view' piece.name %}>{{piece.name}}</a></p> {% endfor %}
+</div>
 {% endblock %}
