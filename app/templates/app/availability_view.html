@@ -29,7 +29,10 @@
 
 {% if thing != 'mcalpin' %}
 <!--change this to a toggle input, screw javascript I'll fix it later-->
-<button class = 'filter clickable' id = 'filter_mcalpin'>Filter by available mcalpin times</button>
+<div class="form-check form-switch m-0 p-0">
+<input class = 'filter form-check-input mt-2 ms-0 me-1' type="checkbox" role="switch" id = 'filter_mcalpin' style="width: 35px; height: 20px;"/>
+<label class="ms-1 mt-2" for="filter_mcalpin">Filter by available mcalpin times</label>
+</div>
 <div class = 'secret'>
     (Arrays that Javascript needs to access)
     <div class = 'mcalpin'>{{mcalpin}}</div>
@@ -50,7 +53,7 @@
     days = to_array(document.querySelector('div.days').textContent)
     times = to_array(document.querySelector('div.times').textContent)
     hidden = false
-    button = document.querySelector('button.filter');
+    button = document.querySelector('input.filter');
     function update_hidden() {
         hidden = !hidden;
         blocks = document.querySelectorAll('button.block')
