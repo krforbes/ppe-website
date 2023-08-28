@@ -245,7 +245,7 @@ def preferences_md(request):
         if len(performers) != piece.num_pianists: # initialize if needed
             performers = ['' for i in range(piece.num_pianists)]
         for i in range(piece.num_pianists):
-            current.append((i+1, performers[i]))
+            current.append((i+1, performers[i].strip()))
         pieces_players.append((piece, current))
     # comments
     comments = []
@@ -609,7 +609,7 @@ def schedule(request):
                 else:
                     triples.append((days[j], sublist[j], piece.color))
             else:
-                triples.append((days[j], sublist[j], '#ffffff'))
+                triples.append((days[j], sublist[j], 'transparent'))
         data_colors.append((times[i], triples))
     context = {
         'user': request.user,
@@ -659,7 +659,7 @@ def schedule_md(request):
                 else:
                     triples.append((days[j], sublist[j], piece.color))
             else:
-                triples.append((days[j], sublist[j], '#ffffff'))
+                triples.append((days[j], sublist[j], 'transparent'))
         data_colors.append((times[i], triples))
     context = {
         'user': request.user,

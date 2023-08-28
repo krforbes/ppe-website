@@ -12,10 +12,11 @@
 
 <p><a href = "{% url 'availability_view' 'mcalpin' %}"> View/edit rehearsal space availability </a> </p>
 
-<p>Individual pieces: 
+<p>Individual pieces:</p>
+<ul class="list-group">
 {% for piece in pieces %}
-<li><a href = "{% url 'availability_view' piece.name %}">{{piece.name}}</a></li>
+<li class="list-group-item"><a href = "{% url 'availability_view' piece.name %}">{{piece.name}}</a></li>
 {% endfor %}
-</p>
+</ul>
 </div>
 {% endblock %}

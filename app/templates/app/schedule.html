@@ -9,17 +9,17 @@
     <tr>
         <th class = 'schedule_left'>  </th>
         {% for day in days %}
-        <th>{{day}}</th>
+        <th><p style="text-align: center; margin-bottom: 0;">{{day}}</p></th>
         {% endfor %}
     </tr>
 
     {% for time, row in data_colors %}
         <tr>
             {% if '00' in time %}
-            <th class = 'schedule_left' rowspan = 4 >{{time}}</th>
+            <th class = 'schedule_left py-1 px-2' rowspan = 4 >{{time}}</th>
             {% endif %}
             {% for day, block, color in row %}
-            <td {% if '00' in time %} class = 'top_border' {% endif %} style = 'background-color: {{color}}; {% if color != "#ffffff" %}border-bottom: none;border-top: none; {% endif %}'>
+            <td {% if '00' in time %} class = 'top_border' {% endif %} style = 'background-color: {{color}}; {% if color != "transparent" %}border-bottom: none;border-top: none; {% endif %}'>
                 <div class = "block {{block}}" id="block_{{day}}_{{time}}" name = "{{day}} {{time}}" style = 'font-size: 90%; background-color: {{color}};'>{{block}}</div>
             </td>
             {% endfor %}

@@ -9,13 +9,11 @@ body {
 #main-block {
     font-family: Arial, Helvetica, sans-serif;
     min-height: 100vh;
+    background-color: rgb(255, 246, 253);
 }
 
 #comic-sans {
     font-family: 'Comic Sans MS', fantasy;
-}
-.schedule{
-    background-color: orange; /* was 222222 */
 }
 
 tr{
@@ -23,7 +21,6 @@ tr{
     overflow: visible;
 }
 td{
-    background-color: white;
     /*padding: 0px;*/
     font-size: small;
     height: 5px;
@@ -41,7 +38,7 @@ td{
 }
 
 th{
-    background-color: lightblue;
+    background-color: rgb(125, 196, 113);
     height: 5px;
     overflow: visible;
 }
@@ -66,6 +63,17 @@ th{
 
 }
 
+
+.info tbody tr:nth-child(odd)
+{
+  background-color: rgb(255, 246, 253);
+}
+
+.info tbody tr:nth-child(even)
+{
+  background-color: rgb(253, 208, 255);
+}
+
 #top{
     height: 70px;
     min-width: 100%;
@@ -73,6 +81,11 @@ th{
     top: 0%;
     left: 0%;
     color: #444444;
+}
+
+.top_border {
+    border-top-width: 2px;
+    border-color: #999999;
 }
 
 .menu-account{
@@ -91,9 +104,9 @@ th{
 
 #cat{
     position: absolute;
-    bottom: calc(85% - 59px);
-    left: 60%;
-    height: 150px;
+    top: 0;
+    right: 30%;
+    height: 100px;
     width: auto;
 }
 
@@ -121,7 +134,6 @@ th{
 }
 
 .menu-link{
-
     color: rgb(80, 19, 136);
 }
 
@@ -148,21 +160,22 @@ th{
 }
 
 #piece_table{
-    background-color: olivedrab;
+    background-color: #999999;
 }
 .piece_table_left{
-    width: 98px;
+    min-width: 98px;
 }
 .piece_table_column{
-    width: 132px;
+    min-width: 132px;
 }
 
 .input_box{
     border: none;
+    background-color: transparent;
 }
 
 #comments{
-    background-color: lemonchiffon;
+    background-color: rgb(212, 244, 251);
     overflow-wrap: break-word;
     height: 150px;
 }
@@ -191,7 +204,7 @@ th{
     background-color: black;
 }
 #pref_table td{
-    padding: 3px;
+    text-align: center;
 }
 
 .input_box{
@@ -202,46 +215,23 @@ th{
     border-color: #555555;
     border-width: 2px;
     border-style: solid;
-    width: 200px;
-    height: 30px;
+    min-width: 200px;
+    min-height: 30px;
     font-size: 120%;
-    margin-top: 30px;
-    margin-bottom: 30px;
-    background-color: white;
+    background-color: transparent;
 }
 
 .clickable:hover{
     background-color: lightcyan;
 }
 
-.hover_button{
-    border-color: #555555;
-    border-width: 2px;
-    border-style: solid;
-    background-color: white;
-    height: 30px;
-    font-size: medium;
-}
-
-.hover_button:hover{
-    background-color: #00cc00;
-}
-
 #filter_mcalpin{
     font-size: 70%;
-}
-
-.menu_name{
-    padding: 3px;
 }
 
 #comment_box{
     width: 753px;
     height: 60px;
-}
-
-#submit_preferences{
-    margin-left: 16px;
 }
 
 
