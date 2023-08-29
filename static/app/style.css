@@ -1,35 +1,30 @@
+html {
+    min-height: 100vh;
+}
+
+body {
+    min-height: 100vh;
+    font-family: 'Raleway', sans-serif;
+}
 
 #main-block {
-    font-family: Arial, Helvetica, sans-serif;
+    min-height: 100vh;
+    background-color: rgb(255, 246, 253);
 }
 
 #comic-sans {
     font-family: 'Comic Sans MS', fantasy;
 }
 
-table{
-    border-collapse: collapse;
-}
-
-.schedule{
-    background-color: #222222;
-    border-collapse: collapse;
-    border: 2px solid #222222;
-}
-
-td{
-    background-color: white;
-    padding: 0px;
+tr{
+    height: 5px;
     overflow: visible;
+}
+td{
+    /*padding: 0px;*/
     font-size: small;
     height: 5px;
-    border-bottom: 1px solid #444444;
-    border-top: 1px solid #444444;
-    border-left: 2px solid #222222;
-}
-
-.top_border{
-    border-top: 2px solid #222222;
+    overflow: visible;
 }
 
 .block{
@@ -37,20 +32,19 @@ td{
     width: 100px;
     border-width: 0px;
     margin-left: 3px;
-    font-size: small;
-    overflow: visible;
     height: 5px;
+    overflow: visible;
 
 }
 
 th{
-    background-color: white;
-    border: 2px solid #222222;
+    background-color: rgb(125, 196, 113);
+    height: 5px;
+    overflow: visible;
 }
 
 .schedule_left{
     width: 50px;
-    height: 5px;
 }
 
 .is_0{
@@ -69,26 +63,39 @@ th{
 
 }
 
+
+.info tbody tr:nth-child(odd)
+{
+  background-color: rgb(255, 246, 253);
+}
+
+.info tbody tr:nth-child(even)
+{
+  background-color: rgb(253, 208, 255);
+}
+
 #top{
-    background-color: #444444;
-    height: 15%;
-    width: 100%;
+    height: 70px;
+    min-width: 100%;
     position: absolute;
     top: 0%;
     left: 0%;
     color: #444444;
 }
 
+.top_border {
+    border-top-width: 2px;
+    border-color: #999999;
+}
+
 .menu-account{
-    text-decoration: none;
-    position: absolute;
-    bottom: 0%;
-    right: 0%;
-    left: 78%;
+    background-color: #444444;
     color: lightcyan;
+    text-align: right;
 }
 .menu-account p{
-    margin-left: 20%;
+    color: lightcyan;
+    margin-bottom: 0;
 }
 
 .menu-account a{
@@ -97,30 +104,36 @@ th{
 
 #cat{
     position: absolute;
-    bottom: calc(85% - 59px);
-    left: 60%;
-    height: 150px;
+    top: 0;
+    right: 30%;
+    height: 100px;
     width: auto;
 }
 
 #menu-block{
-    background-color: #ffffff;
-    color: #ffffff;
-    max-width: 20%;
+    background-color: #444444;
+    min-width: 20%;
+    max-width: 30%;
+    min-height: 100vh;
+}
+
+.menu-element{
+    background-color: white;
+    border: 2px solid white;
+    border-radius: 7px;
 }
 
 .menu-element:hover{
     background-color: lightcyan;
 }
 
-.menu-element h3 {
-    margin: auto;
+.menu-element h3{
+    margin-left: 5%;
     font-size: 120%;
-    text-decoration: none;
+    margin-bottom: 0px;
 }
 
 .menu-link{
-    text-decoration: none;
     color: rgb(80, 19, 136);
 }
 
@@ -128,23 +141,17 @@ th{
 
 
 #content-box{
-    position: absolute;
-    top: 15%;
-    left: 27%;
-    right: 0%;
-    bottom: 0%;
-    overflow: scroll;
+    margin-top: 5%;
     /*display: flex;
     /* align-items: center;
     justify-content: center;*/
 }
 
 #content{
-    position: absolute;
-    top: 7%;
-    left: 7%;
-    width: 785px;
+    display: flex;
+    justify-content: center;
 }
+
 
 
 .secret{
@@ -152,90 +159,53 @@ th{
 }
 
 #piece_table{
-    background-color: olivedrab;
+    background-color: #999999;
+    width: auto;
+    min-width: 100%;
 }
 .piece_table_left{
-    width: 98px;
+    min-width: 100px;
 }
 .piece_table_column{
-    width: 132px;
-}
-
-#piece_table td{
-    border: 2px solid #222222;
+    min-width: 100px;
 }
 
 .input_box{
     border: none;
-    height: 20px;
-    width: 132px;
-    margin: 0px;
+    background-color: transparent;
 }
 
-
-#bottom-menu{
-    background-color: gold;
-    position: relative;
-    left:0%;
-    width: 785px;
-}
 #comments{
-    background-color: lemonchiffon;
+    background-color: rgb(212, 244, 251);
     overflow-wrap: break-word;
-    position: absolute;
-    left: 0%;
     height: 150px;
-    width: 393px;
 }
 #suggested_matchings{
     background-color: rgb(255, 208, 215);
-    position: absolute;
-    left: 50%;
-    top: 0%;
     height: 150px;
-    width: 392px;
 }
 .box{
     height: 100%;
-    /* width: 50%;*/
+    width: 50%;
     overflow-y: scroll;
 }
 #comment-table{
     overflow-wrap: break-word;
 
 }
-
-#comment-table th{
-    border: 1px solid #444444;
-    border-right: none;
-}
-
-#comment-table td{
-    border: 1px solid #444444;
-    border-left: none;
-}
-
 .comment-text{
     overflow-wrap: break-word;
-    width: 305px;
-    border: none;
+    width: 320px;
 
 }
 #table-of-preferences{
-    position: absolute;
-    top: 164px;
-    width: 785px;
-    overflow: scroll;
-    background-color: lightblue;
+    margin-top: 5%;
 }
 #pref_table{
     background-color: black;
 }
-#pref_table th, #pref_table td{
-    border: 1px solid #444444;
-}
 #pref_table td{
-    padding: 3px;
+    text-align: center;
 }
 
 .input_box{
@@ -246,30 +216,13 @@ th{
     border-color: #555555;
     border-width: 2px;
     border-style: solid;
-    border-radius: 0px;
-    width: 200px;
-    height: 30px;
+    min-width: 200px;
+    min-height: 30px;
     font-size: 120%;
-    margin-top: 30px;
-    margin-bottom: 0px;
-    background-color: white;
-    color: black;
+    background-color: transparent;
 }
 
 .clickable:hover{
-    background-color: lightcyan;
-}
-
-.hover_button{
-    border-color: #555555;
-    border-width: 2px;
-    border-style: solid;
-    background-color: white;
-    height: 30px;
-    font-size: medium;
-}
-
-.hover_button:hover{
     background-color: lightcyan;
 }
 
@@ -277,17 +230,9 @@ th{
     font-size: 70%;
 }
 
-.menu_name{
-    padding: 3px;
-}
-
 #comment_box{
     width: 753px;
     height: 60px;
-}
-
-#submit_preferences{
-    margin-left: 16px;
 }
 
 
@@ -311,13 +256,12 @@ th{
 .riddle{
     font-size: large;
     font-style: italic;
-    font-family:'Times New Roman', Times, serif;
 }
 
 #riddle_1{
     width: 391px;
     position: absolute;
-    left: 145px;
+    left: 125px;
     top: 50px;
 }
 
@@ -344,7 +288,6 @@ th{
     left: 90px;
     top: 50px;
     width: 500px;
-    font-family: 'Times New Roman', Times, serif;
     font-style: italic;
 
 }
@@ -378,6 +321,7 @@ th{
     left: 239px;
     bottom: -20px;
 }
+
 #wrong{
     background-color: lightcoral;
 }
@@ -413,11 +357,6 @@ th{
 
 #login_form{
     width: 300px;
-    height: 100px;
-}
-
-#login_form fieldset{
-    background-color: white;
 }
 
 #login_page{
@@ -433,16 +372,14 @@ th{
     width: 180px;
 }
 
-*.unselectable {
-   -moz-user-select: -moz-none;
-   -khtml-user-select: none;
-   -webkit-user-select: none;
-
-   /*
-     Introduced in IE 10.
-     See http://ie.microsoft.com/testdrive/HTML5/msUserSelect/
-   */
-   -ms-user-select: none;
-   user-select: none;
+.table-wrapper {
+    overflow-x: auto;
+    white-space: nowrap;
 }
 
+#login-box {
+    background-color: rgb(247, 234, 244);
+    border-color: white;
+    border-width: 2px;
+    border-style: solid;
+}
