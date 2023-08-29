@@ -9,42 +9,46 @@
         <legend>Do you want to play multiple pieces? </legend><br>
         <div class = 'selection'>
         <input type = 'hidden' id = 'multiple_default' name = 'multiple' value = 'no' />
-        <input type = 'radio' id = 'multiple_yes' name = 'multiple' value = 'yes' /> 
-        <label for = 'multiple_yes'>Yes, I'd love to</label> <br>
-        <input type = 'radio' id = 'multiple_maybe' name = 'multiple' value = 'maybe' /> 
-        <label for = 'multiple_maybe'>Yes, if necessary </label><br>
-        <input type = 'radio' id = 'multiple_no' name = 'multiple' value = 'no' /> 
-        <label for = 'multiple_no'>No</label><br>
+        <input class="form-check-input" type = 'radio' id = 'multiple_yes' name = 'multiple' value = 'yes' /> 
+        <label class="form-check-label" for = 'multiple_yes'>Yes, I'd love to</label> <br>
+        <input class="form-check-input" type = 'radio' id = 'multiple_maybe' name = 'multiple' value = 'maybe' /> 
+        <label class="form-check-label" for = 'multiple_maybe'>Yes, if necessary </label><br>
+        <input class="form-check-input" type = 'radio' id = 'multiple_no' name = 'multiple' value = 'no' /> 
+        <label class="form-check-label" for = 'multiple_no'>No</label><br>
         </div>
     </fieldset>
+    <br>
     <fieldset>
         <legend>Do you want to play a harder part? </legend><br>
         <div class = 'selection'>
         <input type = 'hidden' id = 'hard_default' name = 'hard' value = 'no' />
-        <input type = 'radio' id = 'hard_yes' name = 'hard' value = 'yes' /> 
-        <label for = 'hard_yes'>Yes, I'd love to</label> <br>
-        <input type = 'radio' id = 'hard_maybe' name = 'hard' value = 'maybe' /> 
-        <label for = 'hard_maybe'>Yes, if necessary </label><br>
-        <input type = 'radio' id = 'hard_no' name = 'hard' value = 'no' /> 
-        <label for = 'hard_no'>No</label><br>
+        <input class="form-check-input" type = 'radio' id = 'hard_yes' name = 'hard' value = 'yes' /> 
+        <label class="form-check-label" for = 'hard_yes'>Yes, I'd love to</label> <br>
+        <input class="form-check-input" type = 'radio' id = 'hard_maybe' name = 'hard' value = 'maybe' /> 
+        <label class="form-check-label" for = 'hard_maybe'>Yes, if necessary </label><br>
+        <input class="form-check-input" type = 'radio' id = 'hard_no' name = 'hard' value = 'no' /> 
+        <label class="form-check-label" for = 'hard_no'>No</label><br>
         </div>
     </fieldset>
+    <br>
     <fieldset> 
         <legend>Please choose at least 4 pieces you are willing to play. </legend>
         <div class = 'selection'>
             {% for piece in pieces %}
             <input type = 'hidden' name = '{{piece.name}}' value = 'no' />
-            <input type = 'checkbox' id = "{{piece.name}}" name = '{{piece.name}}' value = 'yes' />
-            <label for = '{{piece.name}}'>{{piece.composer}}: {{piece.title}} ({{piece.num_pianists}}/{{piece.num_pianos}}{% if piece.extras != '' %} + {{piece.extras}}{% endif %}, {{piece.length}})</label> <br> 
+            <input class="form-check-input" type = 'checkbox' id = "{{piece.name}}" name = '{{piece.name}}' value = 'yes' />
+            <label class="form-check-label" for = '{{piece.name}}'>{{piece.composer}}: {{piece.title}} ({{piece.num_pianists}}/{{piece.num_pianos}}{% if piece.extras != '' %} + {{piece.extras}}{% endif %}, {{piece.length}})</label> <br> 
             {% endfor %}
         </div>
     </fieldset>
+    <br>
    <fieldset><legend>Comments etc. </legend><br>
     <div class = 'selection'>
-        <textarea name = 'comments' id = 'comment_box'></textarea>
+        <textarea class="form-control" name = 'comments' id = 'comment_box'></textarea>
     </div>
     </fieldset>
-    <input class="clickable" id = 'submit_preferences' type="submit" value="Submit">
+    <br>
+    <input class="btn btn-success mt-2" role="button" id = 'submit_preferences' type="submit" value="Submit">
 </form>
 
 

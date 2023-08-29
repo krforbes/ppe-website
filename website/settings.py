@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-mu!_ig$1*g9w+*==0vrdb0bk)!tw4i*(3au6r0=c*4t82f-(w%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['pianists.pythonanywhere.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 
 # Application definition

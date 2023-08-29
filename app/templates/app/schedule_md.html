@@ -4,29 +4,30 @@
 
 {% block content %}
 
-
+<div class="d-flex flex-column">
+<div class="container" style="width: auto;">
 <table class = 'schedule'>
     <tr>
         <th class = 'schedule_left unselectable'>  </th>
         {% for day in days %}
-        <th class = 'unselectable'>{{day}}</th>
+        <th class = 'unselectable'><p style="text-align: center; margin-bottom: 0;">{{day}}</p></th>
         {% endfor %}
     </tr>
 
     {% for time, row in data_colors %}
         <tr class = 'unselectable'>
             {% if '00' in time %}
-            <th class = 'schedule_left' rowspan = 4 >{{time}}</th>
+            <th class = 'schedule_left py-1 px-2' rowspan = 4 >{{time}}</th>
             {% endif %}
             {% for day, block, color in row %}
-            <td id = 'wrapper_{{day}}_{{time}}' {% if '00' in time %} class = 'top_border' {% endif %} style = 'background-color: {{color}}; {% if color != "#ffffff" %}border-bottom: none; border-top: none;{% endif %}'>
+            <td id = 'wrapper_{{day}}_{{time}}' {% if '00' in time %} class = 'top_border' {% endif %} style = 'background-color: {{color}}; {% if color != "transparent" %}border-bottom: none; border-top: none;{% endif %}'>
                 <div class = "block {{color}} unselectable" id="{{day}}_{{time}}" name = "{{day}} {{time}}" style = 'font-size: 90%; background-color: {{color}};' >{{block}}</div>
             </td>
             {% endfor %}
         </tr>
     {% endfor %}
 </table><br>
-
+</div>
 
 <datalist id = 'pieces'>
     <option value = "None">None</option>
@@ -35,13 +36,16 @@
     {% endfor %}
 </datalist>
 
+<div class="container">
+<button class = 'btn btn-outline-info mcalpin hover_button me-1 mb-2' role="button">McAlpin</button>{% for piece in piece_list %}<button class = 'btn btn-outline-info button_{{piece.name}} hover_button mx-1 mb-2'>{{piece.name}}</button>{% endfor %}
+</div>
 
-<button class = 'mcalpin hover_button'>mcalpin</button>{% for piece in piece_list %}<button class = 'button_{{piece.name}} hover_button'>{{piece.name}}</button>{% endfor %}
-<br>
-
-<input type = 'text' id = 'input_piece_name' class = 'clickable' placeholder = 'Enter piece name' />
-<button form = 'save' id = 'save_button' class = 'clickable'>Save</button>
-<br>
+<div class="container">
+    <div class="d-flex flex-row">
+        <input type = 'text' id = 'input_piece_name' class = 'form-control me-1' placeholder = 'Enter piece name' style="width: 25%;"/>
+        <button form = 'save' id = 'save_button' class = 'btn btn-primary mx-1' role="button">Save</button>
+    </div>
+</div>
 
 
 <form action = "{% url 'save_schedule'%}" id = 'save' method = 'post'>
@@ -66,7 +70,7 @@
     <div class = '{{piece.name}}'>{{piece.availability}}</div>
     {% endfor %}
 </div>
-
+</div>
 
 <script>
     updating = false;
