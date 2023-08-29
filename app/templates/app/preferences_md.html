@@ -10,102 +10,118 @@
     {% endfor %}
 </datalist>
 
-<p class = 'missing'>
-    <b>People who have not filled out preferences: </b>
-    {% for user in missing %}
-    {{user.username}}
-    {% endfor %}
-</p>
-
-
-<form action = "{% url 'preferences_generate' %}" method = 'post'>
-    {% csrf_token %}
-    <table id = 'piece_table'>
-    <tr><th class = 'piece_table_left'></th><th class = 'piece_table_column'>Piano 1</th class = 'piece_table_column'><th>Piano 2</th><th class = 'piece_table_column'>Piano 3</th><th class = 'piece_table_column'>Piano 4</th><th class = 'piece_table_column'>Piano 5</th></tr>
-    {% for piece, tuple in pieces_players %}
-    <tr>
-    <th class = 'piece_table_left'>{{piece.name}}</th>
-    {% for i, player in tuple %}
-    <td class = 'piece_table_column'>
-    <input type = 'text' class = "input_box" id="{{piece.name}} {{i}}" list = "people" name = "{{piece.name}} {{i}}" value = "{{player}}"  />
-    </td>
-    {% endfor %}
-    </tr>
-    {% endfor %}
-    </table>
-    <input type = 'hidden' name = 'hard' value = 'hard' />
-    <input type = 'checkbox' id = "hard" name = 'hard' value = 'expHard' />
-    <label for = 'expHard'>Include "hard if necessary" for hard parts </label>
-    <input type = 'hidden' name = 'multiple' value = 'multiple' />
-    <input type = 'checkbox' id = "multiple" name = 'multiple' value = 'expMultiple' />
-    <label for = '{{piece.name}}'>Include "multiple pieces if necessary" </label> <br>
-    <input class = 'clickable' type="submit" value="Save">
-</form>
-
-
-
-<div id = "bottom-menu">
-<div id = 'comments' class = 'box'>
-    <b> Comments </b>
-    <table id = 'comment-table'>
-    {% for user, comment in comments %}
-    <tr>
-        <th>{{user}}:</th>
-        <td><div class = 'comment-text'>{{comment}}</div></td>
-    </tr>
-    {% endfor %}
-    </table>
-</div>
-<div id = 'suggested_matchings' class = 'box'>
-<b>Suggestions </b> <br>
-{% for option in matching_list %}
-{% for piece in option %}
-{{piece}}
-<br>
-{% endfor %}
-<br>
-{% endfor %}
-</div>
-<div id = 'table-of-preferences'>
-<table id = 'pref_table'>
-<tr><th class = 'pref-table-element'></th><th class = 'pref-table-element'>hard</th><th class = 'pref-table-element'>multiple</th>
-{% for piece in piece_names %}<th class = 'pref-table-element piece-label' id = 'piece-{{forloop.counter0}}'>{{piece}}</th>
-{% endfor %}</tr>
-{% for name, row in table %}
-<tr>
-    <th class = 'pref-table-element name-label' id = 'label-{{name}}'>{{name}}</th>
-    {% for entry in row %}<td class = 'pref-table-element' id = 'label-{{name}}-{{forloop.counter0}}'>{{entry}}</td>{% endfor %}
-</tr>
-{% endfor %}
-</table>
-
-</div>
-<script>
-    // work in progress
-    // this is for hovering over labels and seeing the rows
-    pieces = document.querySelectorAll('.piece-label')
-    names = document.querySelectorAll('.name-label')
-    function show_rows(label){
-        if (label.className.contains('piece-label')){
-            // highlight rows with people who picked it
-            id = String(label.id)
-            num = Number(id.split('-')[1]) +2 // add 2 because of the first 2 columns
-            for (const name of names){
-                name_id = String(name.id)
-                query = '#' + name_id + '-' + String(num)
-                element = document.querySelector(query)
-                element.style = 'background-color: lightcyan'
+<div class="d-flex flex-column align-items-center" style="max-width: 100%;">
+    <div class="container" style="width: auto; max-width: 100%;">
+        <p class = 'missing'>
+            <b>People who have not filled out preferences: </b>
+            {% for user in missing %}
+            {{user.username}}
+            {% endfor %}
+        </p>
+        
+        
+        <form action = "{% url 'preferences_generate' %}" method = 'post'>
+            {% csrf_token %}
+            <div class="table-wrapper">
+            <table id = 'piece_table' class="info">
+            <tr>
+                <th class = 'piece_table_left py-1 px-2'></th>
+                {% for num in '1234567890'|make_list %}
+                <th class = 'piece_table_column py-1 px-2'>Piano {{num}}</th class = 'piece_table_column p-1'>
+                {% endfor %}
+            </tr>
+            {% for piece, tuple in pieces_players %}
+            <tr>
+            <th class = 'piece_table_left py-1 px-2'>{{piece.name}}</th>
+            {% for i, player in tuple %}
+            <td class = 'piece_table_column'>
+            <input type = 'text' class = "input_box py-1 px-2 d" id="{{piece.name}} {{i}}" list = "people" name = "{{piece.name}} {{i}}" value = "{{player}}"  />
+            </td>
+            {% endfor %}
+            </tr>
+            {% endfor %}
+            </table>
+            </div>
+            <input type = 'hidden' name = 'hard' value = 'hard' />
+            <div class="mt-2">
+                <input class="form-check-input" type = 'checkbox' id = "hard" name = 'hard' value = 'expHard' />
+                <label class="form-check-label" for = 'expHard'>Include "hard if necessary" for hard parts </label>
+            </div>
+            <input type = 'hidden' name = 'multiple' value = 'multiple' />
+            <input class="form-check-input" type = 'checkbox' id = "multiple" name = 'multiple' value = 'expMultiple' />
+            <label class="form-check-label" for = '{{piece.name}}'>Include "multiple pieces if necessary" </label> <br>
+            <input class = 'btn btn-primary mt-2 mb-4' type="submit" value="Save">
+        </form>
+        </div>
+        
+        
+        <div id = "bottom-menu" class="container d-flex flex-row">
+        <div id = 'comments' class = 'box pt-2'>
+            <b style="margin-left: 0.25rem!important;">Comments</b>
+            <table id = 'comment-table'>
+            {% for user, comment in comments %}
+            <tr valign="top">
+                <th style="text-align: right;"><p class="px-1">{{user}}:</p></th>
+                <td style="background-color: rgb(212, 244, 251);"><div class = 'comment-text mx-1'>{{comment}}</div></td>
+            </tr>
+            {% endfor %}
+            </table>
+        </div>
+        <div id = 'suggested_matchings' class = 'box pt-2'>
+        <div class="mx-1">
+        <b>Suggestions </b> <br>
+        {% for option in matching_list %}
+        {% for piece in option %}
+        {% if piece %}
+        {{piece}}
+        <br>
+        {% endif %}
+        {% endfor %}
+        <hr class="mx-2">
+        {% endfor %}
+        </div>
+        </div>
+        </div>
+        <div id = 'table-of-preferences' class="container" style="width: auto;">
+        <table id = 'pref_table' class="info">
+        <tr><th class = 'pref-table-element'></th><th class = 'pref-table-element p-1'>hard</th><th class = 'pref-table-element p-1'>multiple</th>
+        {% for piece in piece_names %}<th class = 'pref-table-element piece-label p-1' id = 'piece-{{forloop.counter0}}'>{{piece}}</th>
+        {% endfor %}</tr>
+        {% for name, row in table %}
+        <tr>
+            <th class = 'pref-table-element name-label py-1 px-2' id = 'label-{{name}}'>{{name}}</th>
+            {% for entry in row %}<td class = 'pref-table-element p-1' id = 'label-{{name}}-{{forloop.counter0}}'>{{entry}}</td>{% endfor %}
+        </tr>
+        {% endfor %}
+        </table>
+        <script>
+            // work in progress
+            // this is for hovering over labels and seeing the rows
+            pieces = document.querySelectorAll('.piece-label')
+            names = document.querySelectorAll('.name-label')
+            function show_rows(label){
+                if (label.className.contains('piece-label')){
+                    // highlight rows with people who picked it
+                    id = String(label.id)
+                    num = Number(id.split('-')[1]) +2 // add 2 because of the first 2 columns
+                    for (const name of names){
+                        name_id = String(name.id)
+                        query = '#' + name_id + '-' + String(num)
+                        element = document.querySelector(query)
+                        element.style = 'background-color: lightcyan'
+                    }
+                }
+                if (label.className.contains('name-label')){
+                    // highlight columns
+                    return
+                }
             }
-        }
-        if (label.className.contains('name-label')){
-            // highlight columns
-            continue
-        }
-    }
-    for (const piece of pieces){
-        piece.addEventListener('click', function() {show_rows(piece);})
-    }
-</script>
+            for (const piece of pieces){
+                piece.addEventListener('click', function() {show_rows(piece);})
+            }
+        </script>
+        </div>
+        
 </div>
 
 

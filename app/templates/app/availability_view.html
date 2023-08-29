@@ -3,19 +3,20 @@
 {% block title %} {{thing}}'s availability {% endblock %}
 
 {% block content %}
-
+<div class="d-flex flex-column">
+<div class="container" style="width: auto;">
 <table class = 'schedule'>
     <tr>
         <th class = 's schedule_left'>  </th>
         {% for day in days %}
-        <th class = 's'>{{day}}</th>
+        <th class = 's'><p style="text-align: center; margin-bottom: 0;">{{day}}</p></th>
         {% endfor %}
     </tr>
 
     {% for time, row in data_colors %}
         <tr {% if '00' in time %} class = 'top_border' {% endif %}>
             {% if '00' in time %}
-            <th class = 'schedule_left' rowspan = 4 >{{time}}</th>
+            <th class = 'schedule_left py-1 px-2' rowspan = 4 >{{time}}</th>
             {% endif %}
             {% for day, block, color in row %}
             <td style = 'background-color: {{color}}; color: {{color}}'>
@@ -27,12 +28,17 @@
 </table>
 
 {% if thing != 'mcalpin' %}
-<button class = 'filter clickable' id = 'filter_mcalpin'>Filter by available mcalpin times</button>
+<!--change this to a toggle input, screw javascript I'll fix it later-->
+<div class="form-check form-switch m-0 p-0">
+<input class = 'filter form-check-input mt-2 ms-0 me-1' type="checkbox" role="switch" id = 'filter_mcalpin' style="width: 35px; height: 20px;"/>
+<label class="ms-1 mt-2" for="filter_mcalpin">Filter by available mcalpin times</label>
+</div>
 <div class = 'secret'>
     (Arrays that Javascript needs to access)
     <div class = 'mcalpin'>{{mcalpin}}</div>
     <div class = 'days'>{{days}}</div>
     <div class = 'times'>{{times}}</div>
+</div>
 </div>
 
 <script>
@@ -47,7 +53,7 @@
     days = to_array(document.querySelector('div.days').textContent)
     times = to_array(document.querySelector('div.times').textContent)
     hidden = false
-    button = document.querySelector('button.filter');
+    button = document.querySelector('input.filter');
     function update_hidden() {
         hidden = !hidden;
         blocks = document.querySelectorAll('button.block')
@@ -80,15 +86,17 @@
 
 {% if not is_user %}
 <div id = 'people_menu'>
+    <div class = 'menu_name'>
 {% for user in arrangers %}
-    <div class = 'menu_name'><a href="{% url 'availability_view' user.username %}">{{user.username}}</a></div>
+    <a class="btn btn-link" href="{% url 'availability_view' user.username %}">{{user.username}}</a>
 {% endfor %}
 {% for user in performers %}
     {% if user not in arrangers %}
-    <div class = 'menu_name'><a href="{% url 'availability_view' user.username %}">{{user.username}}</a></div>
+    <a class="btn btn-link" href="{% url 'availability_view' user.username %}">{{user.username}}</a>
     {% endif %}
 {% endfor %}
 </div>
+</div>
 {% endif %}
-
+</div>
 {% endblock %}
