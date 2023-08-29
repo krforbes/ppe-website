@@ -19,8 +19,7 @@
             <th class = 'schedule_left py-1 px-2' rowspan = 4 >{{time}}</th>
             {% endif %}
             {% for day, block in row %}
-            <td class = 'is_{{block}}' id = "wrapper_{{day}}_{{time}}">
-                <button class = "block is_{{block}}" id = "{{day}}_{{time}}"></button>
+            <td class = 'block is_{{block}}' style="cursor: pointer;" id = "{{day}}_{{time}}">
             </td>
             {% endfor %}
         </tr>
@@ -55,22 +54,18 @@
         split = day_time.split(':')
         input_query = '#input_'+split[0] + '\\:' + split[1]
         hidden_input = document.querySelector(input_query)
-        wrapper_query = '#wrapper_'+split[0]+'\\:'+split[1]
-        wrapper = document.querySelector(wrapper_query)
         if (block.classList.contains("is_0")) {
             block.className = "block is_1"
             // block.textContent = "1"
             hidden_input.value = "1"
-            wrapper.className = 'is_1'
         }
         else {
             block.className = "block is_0"
             // block.textContent = "0"
             hidden_input.value = "0"
-            wrapper.className = 'is_0'
         }
     }
-    const blocks = document.querySelectorAll('button.block');
+    const blocks = document.querySelectorAll('td.block');
     for (const block of blocks) {
         block.addEventListener("click", function () { update_value(block); });
         block.addEventListener('mousedown', function () { toggle_updating(block); })
